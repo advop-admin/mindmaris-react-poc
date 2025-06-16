@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Users, FileText, User, Bell, Search, Plus, Clock, CheckCircle, Upload, Camera, Menu, Home, Settings, X } from 'lucide-react';
 
 const PsychologistApp = () => {
@@ -7,6 +7,9 @@ const PsychologistApp = () => {
   const [modalType, setModalType] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState(8);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   
   const [appointments, setAppointments] = useState([
     { id: 1, patientName: 'Sarah Johnson', time: '09:00 AM', status: 'pending', type: 'Initial Consultation' },
@@ -138,12 +141,12 @@ const PsychologistApp = () => {
     }
   };
 
-  const Modal = ({ title, children }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+  const Modal = ({ title, children, onClose }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-lg w-11/12 max-w-xs sm:max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>
-          <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose || closeModal} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -496,6 +499,32 @@ const PsychologistApp = () => {
     </div>
   );
 
+  const SettingsPage = () => (
+    <div className="p-4 space-y-4">
+      <h1 className="text-xl font-bold text-gray-900">Settings</h1>
+      <div className="bg-white rounded-lg shadow-sm border p-4 text-gray-600 text-center">
+        Settings content goes here.
+      </div>
+    </div>
+  );
+
+  const handleNotificationClick = () => {
+    setShowNotificationDropdown((prev) => !prev);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!showNotificationDropdown) return;
+    function handleClick(e) {
+      if (!document.getElementById('notification-dropdown')?.contains(e.target) &&
+          !document.getElementById('notification-bell')?.contains(e.target)) {
+        setShowNotificationDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showNotificationDropdown]);
+
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard': return <Dashboard />;
@@ -503,6 +532,7 @@ const PsychologistApp = () => {
       case 'patients': return <Patients />;
       case 'reports': return <Reports />;
       case 'profile': return <Profile />;
+      case 'settings': return <SettingsPage />;
       default: return <Dashboard />;
     }
   };
@@ -519,13 +549,29 @@ const PsychologistApp = () => {
           </div>
           <span className="font-semibold">Hospital Portal</span>
         </div>
-        <div className="flex items-center space-x-3">
-          <button className="hover:bg-blue-700 p-1 rounded transition-colors">
+        <div className="flex items-center space-x-3 relative">
+          <button
+            id="notification-bell"
+            className="hover:bg-blue-700 p-1 rounded transition-colors relative"
+            onClick={handleNotificationClick}
+          >
             <Bell className="h-5 w-5" />
           </button>
-          <button className="hover:bg-blue-700 p-1 rounded transition-colors">
-            <Settings className="h-5 w-5" />
-          </button>
+          {showNotificationDropdown && (
+            <div
+              id="notification-dropdown"
+              className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-lg border z-50"
+            >
+              <div className="p-4 text-gray-900">
+                <div className="font-semibold mb-2">Notifications</div>
+                <ul className="space-y-2">
+                  <li className="text-sm">🕒 Your 9:00 AM appointment is coming up soon.</li>
+                  <li className="text-sm">✅ James Wilson's session marked as complete.</li>
+                  <li className="text-sm">📄 New report uploaded for Sarah Johnson.</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -560,7 +606,7 @@ const PsychologistApp = () => {
 
       {/* Modals */}
       {showAddModal && modalType === 'appointment' && (
-        <Modal title="Add New Appointment">
+        <Modal title="Add New Appointment" onClose={closeModal}>
           <div className="space-y-4">
             <input
               type="text"
@@ -605,7 +651,7 @@ const PsychologistApp = () => {
       )}
 
       {showAddModal && modalType === 'patient' && (
-        <Modal title="Add New Patient">
+        <Modal title="Add New Patient" onClose={closeModal}>
           <div className="space-y-4">
             <input
               type="text"
@@ -647,7 +693,7 @@ const PsychologistApp = () => {
       )}
 
       {showAddModal && modalType === 'report' && (
-        <Modal title="Add New Report">
+        <Modal title="Add New Report" onClose={closeModal}>
           <div className="space-y-4">
             <select
               value={formData.selectedPatient}
