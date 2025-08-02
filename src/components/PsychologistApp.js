@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, FileText, User, Bell, Search, Plus, Clock, CheckCircle, Upload, Camera, Menu, Home, Settings, X, LogOut, MessageSquare, Edit, Eye, ArrowLeft } from 'lucide-react';
+import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft } from 'lucide-react';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [modalType, setModalType] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+
   const [selectedDate, setSelectedDate] = useState(8);
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -170,7 +168,7 @@ const PsychologistApp = () => {
     appointmentNotes: ''
   });
 
-  const [profile, setProfile] = useState({
+  const [profile] = useState({
     name: 'Dr. Sarah Smith',
     title: 'Clinical Counsellor',
     email: 'dr.smith@mindmaris.com',
@@ -261,10 +259,7 @@ const PsychologistApp = () => {
     window.location.href = '/';
   };
 
-  const filteredAppointments = appointments.filter(appointment =>
-    appointment.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    appointment.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -274,21 +269,7 @@ const PsychologistApp = () => {
     }
   };
 
-  const Modal = ({ title, children, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-11/12 max-w-xs sm:max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="p-4">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+
 
   const Dashboard = () => (
     <div className="p-4 space-y-6">
