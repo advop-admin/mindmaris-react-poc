@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, FileText, User, Bell, Search, Plus, CheckCircle, Download, BarChart3, Settings, X, Eye, LogOut } from 'lucide-react';
+import { Calendar, Users, FileText, User, Bell, Search, Plus, CheckCircle, Download, BarChart3, Settings, X, LogOut } from 'lucide-react';
 
 const ManagementApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -24,20 +24,20 @@ const ManagementApp = () => {
     { id: 4, name: 'James Wilson', age: 31, phone: '+1-555-0126', email: 'james@email.com', condition: 'Bipolar Disorder' }
   ]);
 
-  const [doctors] = useState([
+  const [doctors, setDoctors] = useState([
     { id: 1, name: 'Dr. Sarah Smith', specialization: 'Clinical Psychology', availability: 'Mon-Fri 9AM-5PM', patients: 12 },
     { id: 2, name: 'Dr. John Wilson', specialization: 'Psychiatry', availability: 'Mon-Fri 10AM-6PM', patients: 8 },
     { id: 3, name: 'Dr. Maria Brown', specialization: 'Child Psychology', availability: 'Mon-Thu 9AM-4PM', patients: 15 },
     { id: 4, name: 'Dr. David Lee', specialization: 'Addiction Therapy', availability: 'Mon-Fri 2PM-8PM', patients: 6 }
   ]);
 
-  const [reports] = useState([
+  const [reports, setReports] = useState([
     { id: 1, title: 'Assessment Report #1', patient: 'Sarah Johnson', doctor: 'Dr. Smith', date: 'Jan 7, 2025', status: 'completed' },
     { id: 2, title: 'Assessment Report #2', patient: 'Michael Chen', doctor: 'Dr. Wilson', date: 'Jan 6, 2025', status: 'completed' },
     { id: 3, title: 'Assessment Report #3', patient: 'Emily Davis', doctor: 'Dr. Brown', date: 'Jan 5, 2025', status: 'pending' }
   ]);
 
-  const [earnings] = useState({
+  const [earnings, setEarnings] = useState({
     weekly: {
       total: 12500,
       prime: 8000,
@@ -68,7 +68,7 @@ const ManagementApp = () => {
     selectedDoctorForReport: ''
   });
 
-  const [profile] = useState({
+  const [profile, setProfile] = useState({
     name: 'Centre Admin',
     title: 'Centre Management',
     email: 'admin@mindmaris.com',
