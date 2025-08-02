@@ -651,7 +651,7 @@ const PsychologistApp = () => {
             </div>
             <span className="font-semibold text-gray-900">Mindmaris Counsellors India</span>
         </div>
-        <div className="flex items-center space-x-3 relative">
+        <div className="flex items-center space-x-3">
           <button
             id="notification-bell"
             className="hover:bg-gray-100 p-1 rounded transition-colors relative"
@@ -662,7 +662,7 @@ const PsychologistApp = () => {
           {showNotificationDropdown && (
             <div
               id="notification-dropdown"
-              className="absolute left-1/2 -translate-x-1/2 mt-2 w-72 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-sm border border-gray-100 z-50 transform transition-all duration-200 ease-out"
+              className="fixed top-20 right-4 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-sm border border-gray-100 z-50 transform transition-all duration-200 ease-out"
             >
               <div className="p-3">
                 <div className="flex items-center justify-between mb-2">
