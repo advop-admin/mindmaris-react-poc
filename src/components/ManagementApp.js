@@ -372,6 +372,24 @@ const ManagementApp = () => {
           <p className="font-medium text-gray-900">Appointments</p>
           <p className="text-sm text-gray-600">Schedule & manage</p>
         </button>
+        
+        <button 
+          onClick={() => setCurrentPage('doctors')}
+          className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
+        >
+          <User className="h-6 w-6 text-teal-600 mb-2" />
+          <p className="font-medium text-gray-900">Doctor Management</p>
+          <p className="text-sm text-gray-600">Manage doctors & schedules</p>
+        </button>
+        
+        <button 
+          onClick={() => setCurrentPage('reports')}
+          className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
+        >
+          <FileText className="h-6 w-6 text-teal-600 mb-2" />
+          <p className="font-medium text-gray-900">Reports</p>
+          <p className="text-sm text-gray-600">View & download reports</p>
+        </button>
       </div>
     </div>
   );
@@ -634,10 +652,7 @@ const ManagementApp = () => {
         <div className="flex justify-around py-2">
           {[
             { id: 'dashboard', icon: BarChart3, label: 'Dashboard' },
-            { id: 'patients', icon: Users, label: 'Patients' },
             { id: 'appointments', icon: Calendar, label: 'Appointments' },
-            { id: 'doctors', icon: User, label: 'Doctors' },
-            { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'profile', icon: Settings, label: 'Profile' }
           ].map(({ id, icon: Icon, label }) => (
             <button

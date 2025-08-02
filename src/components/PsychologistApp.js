@@ -458,23 +458,17 @@ const PsychologistApp = () => {
   const AppointmentDetail = () => (
     <div className="p-4 space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <button 
-            onClick={() => setCurrentPage('schedule')}
-            className="text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <h1 className="text-xl font-bold text-gray-900">Appointment Details</h1>
+              <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <button 
+              onClick={() => setCurrentPage('schedule')}
+              className="text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <h1 className="text-xl font-bold text-gray-900">Appointment Details</h1>
+          </div>
         </div>
-        <button 
-          onClick={handleLogout}
-          className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
-      </div>
 
       {selectedAppointment && (
         <>
@@ -579,12 +573,6 @@ const PsychologistApp = () => {
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Profile</h1>
-        <button 
-          onClick={handleLogout}
-          className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
-        >
-          <LogOut className="h-5 w-5" />
-        </button>
       </div>
       
       <div className="bg-white rounded-lg shadow-sm border p-4">
