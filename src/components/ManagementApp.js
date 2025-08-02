@@ -6,6 +6,7 @@ const ManagementApp = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingItem, setEditingItem] = useState(null);
 
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   
@@ -96,6 +97,17 @@ const ManagementApp = () => {
   const closeModal = () => {
     setShowAddModal(false);
     setModalType('');
+    setEditingItem(null);
+    setFormData({
+      patientName: '',
+      patientAge: '',
+      patientPhone: '',
+      patientEmail: '',
+      patientCondition: '',
+      selectedDoctor: '',
+      appointmentTime: '',
+      appointmentType: ''
+    });
   };
 
   const handleFormChange = (field, value) => {
@@ -104,15 +116,26 @@ const ManagementApp = () => {
 
   const addPatient = () => {
     if (formData.patientName && formData.patientAge && formData.patientPhone) {
-      const newPatient = {
-        id: patients.length + 1,
-        name: formData.patientName,
-        age: parseInt(formData.patientAge),
-        phone: formData.patientPhone,
-        email: formData.patientEmail,
-        condition: 'To be assessed'
-      };
-      setPatients(prev => [...prev, newPatient]);
+      if (editingItem) {
+        // Update existing patient
+        setPatients(prev => prev.map(patient => 
+          patient.id === editingItem.id 
+            ? { ...patient, name: formData.patientName, age: parseInt(formData.patientAge), phone: formData.patientPhone, email: formData.patientEmail || '', condition: formData.patientCondition || 'To be assessed' }
+            : patient
+        ));
+        setEditingItem(null);
+      } else {
+        // Add new patient
+        const newPatient = {
+          id: patients.length + 1,
+          name: formData.patientName,
+          age: parseInt(formData.patientAge),
+          phone: formData.patientPhone,
+          email: formData.patientEmail || '',
+          condition: formData.patientCondition || 'To be assessed'
+        };
+        setPatients(prev => [...prev, newPatient]);
+      }
       closeModal();
     }
   };
@@ -130,6 +153,22 @@ const ManagementApp = () => {
       setAppointments(prev => [...prev, newAppointment]);
       closeModal();
     }
+  };
+
+  const editPatient = (patient) => {
+    setEditingItem(patient);
+    setFormData({
+      patientName: patient.name,
+      patientAge: patient.age.toString(),
+      patientPhone: patient.phone,
+      patientEmail: patient.email || '',
+      patientCondition: patient.condition || '',
+      selectedDoctor: '',
+      appointmentTime: '',
+      appointmentType: ''
+    });
+    setModalType('patient');
+    setShowAddModal(true);
   };
 
   const downloadReport = (reportId) => {
@@ -151,9 +190,9 @@ const ManagementApp = () => {
   };
 
   const Modal = ({ title, children, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-11/12 max-w-xs sm:max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg w-full max-w-sm mx-auto max-h-[85vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button onClick={onClose || closeModal} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
@@ -323,7 +362,10 @@ const ManagementApp = () => {
                 <p className="text-sm text-gray-600">Email: {patient.email}</p>
                 <p className="text-sm text-blue-600 mt-1">Condition: {patient.condition}</p>
               </div>
-              <button className="text-gray-400 hover:text-gray-600 transition-colors">
+              <button 
+                onClick={() => editPatient(patient)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
                 <Settings className="h-5 w-5" />
               </button>
             </div>
@@ -634,7 +676,7 @@ const ManagementApp = () => {
 
       {/* Modals */}
       {showAddModal && modalType === 'patient' && (
-        <Modal title="Add New Patient" onClose={closeModal}>
+        <Modal title={editingItem ? "Edit Patient" : "Add New Patient"} onClose={closeModal}>
           <div className="space-y-4">
             <input
               type="text"
@@ -664,6 +706,13 @@ const ManagementApp = () => {
               onChange={(e) => handleFormChange('patientEmail', e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+            <input
+              type="text"
+              placeholder="Condition (Optional)"
+              value={formData.patientCondition}
+              onChange={(e) => handleFormChange('patientCondition', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
             <div className="flex space-x-3 pt-4">
               <button
                 onClick={closeModal}
@@ -675,7 +724,7 @@ const ManagementApp = () => {
                 onClick={addPatient}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Add Patient
+                {editingItem ? "Update Patient" : "Add Patient"}
               </button>
             </div>
           </div>
