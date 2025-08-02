@@ -281,9 +281,9 @@ const ManagementApp = () => {
   const Dashboard = () => (
     <div className="p-4 space-y-6">
       {/* Header */}
-      <div className="bg-blue-600 text-white p-4 rounded-lg shadow-md">
-        <h1 className="text-xl font-bold">Hospital Management Dashboard</h1>
-        <p className="text-blue-100">Wednesday, January 8, 2025</p>
+      <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-blue-600 text-gray-900 p-4 rounded-lg shadow-sm">
+        <h1 className="text-xl font-bold text-blue-600">Hospital Management Dashboard</h1>
+        <p className="text-gray-600">Wednesday, January 8, 2025</p>
       </div>
 
       {/* Quick Stats */}
