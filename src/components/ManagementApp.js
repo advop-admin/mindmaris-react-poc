@@ -170,8 +170,8 @@ const ManagementApp = () => {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="bg-blue-600 text-white p-4 rounded-lg shadow-md">
-        <h1 className="text-xl font-bold">Hospital Management Dashboard</h1>
-        <p className="text-blue-100">Wednesday, January 8, 2025</p>
+        <h1 className="text-lg font-semibold">Management Dashboard</h1>
+        <p className="text-blue-100 text-sm">Wednesday, January 8, 2025</p>
       </div>
 
       {/* Quick Stats */}
@@ -204,8 +204,18 @@ const ManagementApp = () => {
       {/* Weekly Earnings */}
       <div className="bg-white rounded-lg shadow-sm border">
         <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">Weekly Earnings</h2>
-          <p className="text-sm text-gray-600">Jan 5 - Jan 11, 2025</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Weekly Earnings</h2>
+              <p className="text-sm text-gray-600">Jan 5 - Jan 11, 2025</p>
+            </div>
+            <select className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="current">Current Week</option>
+              <option value="previous">Previous Week</option>
+              <option value="two-weeks">Two Weeks Ago</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
         </div>
         <div className="p-4 space-y-4">
           <div className="text-center">
