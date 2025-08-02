@@ -321,9 +321,9 @@ const PsychologistApp = () => {
                 <p className="text-sm text-gray-600">{appointment.time} • {appointment.type}</p>
               </div>
               <div className="flex items-center space-x-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                  {appointment.status}
-                </span>
+              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                {appointment.status}
+              </span>
                 <button
                   onClick={() => openAppointmentDetail(appointment)}
                   className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
@@ -372,73 +372,67 @@ const PsychologistApp = () => {
     );
 
     return (
-      <div className="p-4 space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">Schedule</h1>
-          <button 
-            onClick={handleLogout}
-            className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
-        </div>
+    <div className="p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold text-gray-900">Schedule</h1>
+      </div>
 
-        {/* Calendar Header */}
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="grid grid-cols-7 gap-1 text-center mb-4">
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-              <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1 text-center">
+      {/* Calendar Header */}
+      <div className="bg-white rounded-lg shadow-sm border p-4">
+        <div className="grid grid-cols-7 gap-1 text-center mb-4">
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+            <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
+          ))}
+        </div>
+        <div className="grid grid-cols-7 gap-1 text-center">
             {[6, 7, 8, 9, 10, 11, 12].map(date => {
               const dateString = `2025-01-${date.toString().padStart(2, '0')}`;
               const appointmentsForDate = appointments.filter(apt => apt.date === dateString);
               const hasAppointments = appointmentsForDate.length > 0;
               
               return (
-                <button
-                  key={date}
-                  onClick={() => setSelectedDate(date)}
-                  className={`py-2 text-sm rounded-lg transition-colors ${
+            <button
+              key={date}
+              onClick={() => setSelectedDate(date)}
+              className={`py-2 text-sm rounded-lg transition-colors ${
                     date === selectedDate 
                       ? 'bg-teal-600 text-white font-bold' 
                       : hasAppointments 
                         ? 'text-teal-800 hover:bg-gray-100 font-bold' 
                         : 'text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  {date}
-                </button>
+              }`}
+            >
+              {date}
+            </button>
               );
             })}
           </div>
-        </div>
+      </div>
 
-        {/* Appointments List */}
-        <div className="space-y-3">
+      {/* Appointments List */}
+      <div className="space-y-3">
           {filteredAppointments.length > 0 ? (
             filteredAppointments.map(appointment => (
-              <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
+          <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
+                <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
                     <p className="text-sm text-teal-600 mt-1">{appointment.type}</p>
                     {appointment.notes && (
                       <p className="text-sm text-gray-500 mt-1">Notes: {appointment.notes}</p>
                     )}
-                  </div>
-                  <div className="flex flex-col items-end space-y-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                      {appointment.status}
-                    </span>
-                    <button
+              </div>
+              <div className="flex flex-col items-end space-y-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                  {appointment.status}
+                </span>
+                  <button
                       onClick={() => openAppointmentDetail(appointment)}
                       className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
-                    >
+                  >
                       Details
-                    </button>
+                  </button>
                   </div>
                 </div>
               </div>
@@ -450,32 +444,32 @@ const PsychologistApp = () => {
               <p className="text-gray-600">No appointments scheduled for January {selectedDate}, 2025</p>
             </div>
           )}
-        </div>
       </div>
-    );
+    </div>
+  );
   };
 
   const AppointmentDetail = () => (
     <div className="p-4 space-y-4">
       {/* Header */}
-              <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <button 
+        <button 
               onClick={() => setCurrentPage('schedule')}
               className="text-gray-600 hover:text-gray-800 transition-colors"
-            >
+        >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+        </button>
             <h1 className="text-xl font-bold text-gray-900">Appointment Details</h1>
-          </div>
-        </div>
+      </div>
+      </div>
 
       {selectedAppointment && (
         <>
           {/* Appointment Info */}
           <div className="bg-white rounded-lg shadow-sm border p-4">
             <h2 className="font-semibold text-gray-900 mb-4">Appointment Information</h2>
-            <div className="space-y-3">
+      <div className="space-y-3">
               <div className="flex justify-between">
                 <span className="text-gray-600">Patient:</span>
                 <span className="font-medium">{selectedAppointment.patientName}</span>
@@ -530,40 +524,40 @@ const PsychologistApp = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Last Visit:</span>
                 <span className="font-medium">{selectedAppointment.patientDetails.lastVisit}</span>
-              </div>
-            </div>
-          </div>
+      </div>
+    </div>
+      </div>
 
           {/* Status Actions */}
-          <div className="bg-white rounded-lg shadow-sm border p-4">
+      <div className="bg-white rounded-lg shadow-sm border p-4">
             <h2 className="font-semibold text-gray-900 mb-4">Actions</h2>
             <div className="space-y-3">
               {selectedAppointment.status === 'pending' && (
-                <div className="space-y-3">
-                  <button
+        <div className="space-y-3">
+            <button 
                     onClick={() => markAppointmentComplete(selectedAppointment.id)}
                     className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-                  >
+            >
                     Mark as Completed
-                  </button>
-                  <button
+            </button>
+            <button 
                     onClick={() => openReportModal(selectedAppointment)}
                     className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-                  >
+            >
                     Submit Report
-                  </button>
-                </div>
+            </button>
+          </div>
               )}
               {selectedAppointment.status === 'completed' && (
-                <button
+          <button 
                   onClick={() => openReportModal(selectedAppointment)}
                   className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-                >
+          >
                   View/Edit Report
-                </button>
+          </button>
               )}
             </div>
-          </div>
+        </div>
         </>
       )}
     </div>
@@ -571,8 +565,14 @@ const PsychologistApp = () => {
 
   const Profile = () => (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Profile</h1>
+        <button 
+          onClick={handleLogout}
+          className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+        >
+          <LogOut className="h-5 w-5" />
+        </button>
       </div>
       
       <div className="bg-white rounded-lg shadow-sm border p-4">
@@ -631,7 +631,7 @@ const PsychologistApp = () => {
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
       {/* Top Header */}
       <div className="bg-white text-gray-900 p-4 flex items-center justify-between border-b border-gray-200">
-                  <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3">
             <div className="bg-teal-500 p-1 rounded">
               <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
                 <span className="text-teal-500 text-xs font-bold">M</span>
@@ -735,7 +735,7 @@ const PsychologistApp = () => {
           <div className="bg-white rounded-lg w-full max-w-sm mx-4 max-h-[85vh] overflow-y-auto">
             <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white">
               <h2 className="text-lg font-semibold">Submit Report</h2>
-              <button 
+              <button
                 onClick={() => {
                   setShowReportModal(false);
                   setSelectedAppointment(null);
@@ -748,8 +748,8 @@ const PsychologistApp = () => {
             <div className="p-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Patient Name</label>
-                <input
-                  type="text"
+            <input
+              type="text"
                   value={formData.selectedPatient}
                   className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
                   readOnly
@@ -762,7 +762,7 @@ const PsychologistApp = () => {
                   <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
                   <p className="text-sm text-gray-600 mb-1">Click to upload or drag and drop</p>
                   <p className="text-xs text-gray-500">PDF, JPG, PNG up to 10MB</p>
-                  <input
+            <input
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"
                     className="hidden"
@@ -788,16 +788,16 @@ const PsychologistApp = () => {
               </div>
               
               <div className="flex space-x-3 pt-2">
-                <button
+              <button
                   onClick={() => {
                     setShowReportModal(false);
                     setSelectedAppointment(null);
                   }}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                >
-                  Cancel
-                </button>
-                <button
+              >
+                Cancel
+              </button>
+              <button
                   onClick={() => {
                     submitReport();
                     setShowReportModal(false);
@@ -806,7 +806,7 @@ const PsychologistApp = () => {
                   className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
                 >
                   Submit Report
-                </button>
+              </button>
               </div>
             </div>
           </div>
@@ -840,18 +840,18 @@ const PsychologistApp = () => {
               <h3 className="text-lg font-semibold text-gray-900">Confirm Logout</h3>
               <p className="text-gray-600">Are you sure you want to logout?</p>
               <div className="flex space-x-3 pt-2">
-                <button
+              <button
                   onClick={() => setShowLogoutModal(false)}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-                >
-                  Cancel
-                </button>
-                <button
+              >
+                Cancel
+              </button>
+              <button
                   onClick={confirmLogout}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                >
+              >
                   Logout
-                </button>
+              </button>
               </div>
             </div>
           </div>
