@@ -281,7 +281,7 @@ const ManagementApp = () => {
   const Dashboard = () => (
     <div className="p-4 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-br from-white to-gray-50 border-2 border-blue-600 text-gray-900 p-4 rounded-lg shadow-sm">
+      <div className="bg-gradient-to-br from-white to-gray-50 text-gray-900 p-4 rounded-lg shadow-sm">
         <h1 className="text-xl font-bold text-blue-600">Hospital Management Dashboard</h1>
         <p className="text-gray-600">Wednesday, January 8, 2025</p>
       </div>
@@ -611,14 +611,14 @@ const ManagementApp = () => {
   return (
     <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
       {/* Top Header */}
-      <div className="bg-blue-600 text-white p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="bg-white p-1 rounded">
-            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-              <span className="text-white text-xs font-bold">M</span>
+      <div className="bg-white text-gray-900 p-4 flex items-center justify-between border-b border-gray-200">
+                  <div className="flex items-center space-x-3">
+            <div className="bg-blue-600 p-1 rounded">
+              <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
+                <span className="text-blue-600 text-xs font-bold">M</span>
+              </div>
             </div>
-          </div>
-          <span className="font-semibold">Mindmaris Counsellors India</span>
+            <span className="font-semibold text-gray-900">Mindmaris Counsellors India</span>
         </div>
         <div className="flex items-center space-x-3">
         </div>
