@@ -28,7 +28,7 @@ const LandingPage = () => {
                     <User className="h-6 w-6" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold">Counsellor Dashboard</h2>
+                    <h2 className="text-lg font-semibold">Doctors Dashboard</h2>
                     <p className="text-blue-100 text-sm">Manage patients, appointments & reports</p>
                   </div>
                 </div>

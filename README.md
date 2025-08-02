@@ -5,10 +5,10 @@ A modern React-based application for Mindmaris Counsellors India, featuring a mu
 ## Features
 
 ### 🏠 Landing Page
-- **Dashboard Selection**: Choose between Counsellor and Management dashboards
+- **Dashboard Selection**: Choose between Doctors and Management dashboards
 - **Professional Branding**: Mindmaris Counsellors India branding throughout
 
-### 👨‍⚕️ Counsellor Dashboard (`/psychologists`)
+### 👨‍⚕️ Doctors Dashboard (`/psychologists`)
 - **Dashboard**: Overview of daily appointments and quick stats
 - **Schedule Management**: Calendar view with appointment tracking and date filtering
 - **Appointment Details**: View patient information and manage appointment status
