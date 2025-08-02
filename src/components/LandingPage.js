@@ -9,8 +9,8 @@ const LandingPage = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="bg-teal-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white text-2xl font-bold">M</span>
+            <div className="w-16 h-16 mx-auto mb-4">
+              <img src="/logo.svg" alt="Mindmaris Logo" className="w-full h-full" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Mindmaris Counsellors India</h1>
             <p className="text-gray-600">Choose your dashboard to continue</p>

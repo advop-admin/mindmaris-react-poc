@@ -636,10 +636,8 @@ const ManagementApp = () => {
       {/* Top Header */}
       <div className="bg-white text-gray-900 p-4 flex items-center justify-between border-b border-gray-200">
                   <div className="flex items-center space-x-3">
-            <div className="bg-teal-600 p-1 rounded">
-              <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                <span className="text-teal-600 text-xs font-bold">M</span>
-              </div>
+            <div className="w-8 h-8">
+              <img src="/logo.svg" alt="Mindmaris Logo" className="w-full h-full" />
             </div>
             <span className="font-semibold text-gray-900">Mindmaris Counsellors India</span>
         </div>
