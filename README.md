@@ -1,113 +1,190 @@
-# Mindmaris Counsellors India - React POC
+# Mindmaris Counsellors India - React Application
 
-A modern React-based application for Mindmaris Counsellors India, featuring a multi-dashboard system for counsellors and management to manage appointments, patient records, and reports.
+A React-based application for Mindmaris Counsellors India with two distinct dashboards for doctors and management.
 
-## Features
+## Application Structure
 
-### 🏠 Landing Page
-- **Dashboard Selection**: Choose between Doctors and Management dashboards
-- **Professional Branding**: Mindmaris Counsellors India branding throughout
+### Landing Page (`/`)
+- Dashboard selection between Doctors and Management
+- Professional branding with Mindmaris logo
+- Direct navigation to respective dashboards
 
-### 👨‍⚕️ Doctors Dashboard (`/psychologists`)
-- **Dashboard**: Overview of daily appointments and quick stats
-- **Schedule Management**: Calendar view with appointment tracking and date filtering
-- **Appointment Details**: View patient information and manage appointment status
-- **Report Submission**: Upload reports with file attachments and remarks
-- **Profile Management**: Simplified profile with essential contact information
-- **Status Management**: Mark appointments as Pending or Completed
+### Doctors Dashboard (`/psychologists`)
 
-### 🏢 Management Dashboard (`/management`)
-- **Dashboard**: Weekly earnings overview and doctor appointment statistics
-- **Patient Management**: Add and manage patient records
-- **Appointment Management**: Schedule appointments and assign counsellors
-- **Report Management**: View and download counsellor reports
-- **Doctor Management**: Manage counsellor profiles and schedules
-- **Analytics**: Quick stats and earnings dashboard
+#### Pages & Features:
 
-## Getting Started
+**Dashboard Page**
+- Daily appointment overview
+- Quick stats: Total appointments, Completed, Pending
+- Notification system with dropdown
+- Profile access and logout functionality
 
-### Prerequisites
+**Schedule Page**
+- Calendar view with date selection (Jan 8-14, 2025)
+- Date filtering - appointments change based on selected date
+- Appointment list showing: Patient name, time, status, type
+- Bold blue text indicator for dates with appointments
+- Click appointment to view details
 
-- Node.js (version 14 or higher)
-- npm or yarn
+**Appointment Detail Page**
+- Patient information: Name, age, phone, email, condition, last visit
+- Appointment details: Time, type, notes, status
+- Status management: Mark as "Pending" or "Completed"
+- Report submission: Upload file (image/PDF), add remarks
+- Back navigation to schedule
 
-### Installation
+**Profile Page**
+- Read-only display: Name, title, email, phone
+- Logout functionality
 
-1. Clone the repository:
-```bash
-git clone https://github.com/advop-admin/mindmaris-react-poc.git
-cd mindmaris-react-poc
-```
+#### Data Management:
+- localStorage persistence for appointments and reports
+- Status changes persist across sessions
+- File upload simulation for reports
 
-2. Install the dependencies:
-```bash
-npm install
-```
+### Management Dashboard (`/management`)
 
-3. Start the development server:
-```bash
-npm start
-```
+#### Pages & Features:
 
-4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Dashboard Page**
+- Weekly earnings overview (total amount only)
+- Doctor appointment statistics
+- Quick access to all management functions
 
-### Available Scripts
+**Patients Page**
+- Patient list with search functionality
+- Add new patients: Name, age, phone, email, condition
+- Edit existing patients
+- Patient details: ID, name, age, phone, email, condition
 
-- `npm start` - Runs the app in development mode
-- `npm run build` - Builds the app for production
-- `npm test` - Launches the test runner
-- `npm run eject` - Ejects from Create React App (one-way operation)
+**Appointments Page**
+- Appointment list with search
+- Schedule new appointments: Patient, doctor, time, type
+- Edit existing appointments
+- Status tracking: Pending/Completed
 
-## Technology Stack
+**Doctors Page**
+- Doctor list with add/edit functionality
+- Doctor details: Name, specialization, availability, active patients
+- Add new doctors with full details
+
+**Reports Page**
+- Report list: Title, patient, doctor, date, status
+- Download functionality (PDF simulation)
+- Report status tracking
+
+**Profile Page**
+- Management profile: Centre Admin details
+- Logout functionality
+
+#### Data Management:
+- Full CRUD operations for patients, appointments, doctors
+- Search and filter capabilities
+- Modal-based forms for add/edit operations
+
+## Technical Stack
 
 - **React 18** - Frontend framework
-- **React Router DOM** - Client-side routing
-- **Tailwind CSS** - Utility-first CSS framework
+- **React Router DOM v6.8.1** - Client-side routing
+- **Tailwind CSS** - Styling framework
 - **Lucide React** - Icon library
-- **Create React App** - Development setup
 - **localStorage** - Client-side data persistence
-
-## Key Features
-
-### 📱 Mobile-First Design
-- Responsive design optimized for mobile devices
-- Touch-friendly interface
-- Bottom navigation for easy thumb navigation
-- Card-based layout for better readability
-
-### 💾 Data Persistence
-- **localStorage Integration**: All appointment statuses and reports are automatically saved
-- **Session Persistence**: Data survives browser refreshes and restarts
-- **Real-time Updates**: Changes are immediately reflected across all pages
-
-### 🎯 Simplified Workflow
-- **Two Status System**: Only "Pending" and "Completed" statuses for clarity
-- **Direct Actions**: Counsellors can directly mark appointments as completed
-- **Integrated Reports**: Report submission automatically updates appointment status
-
-### 🏥 Professional Context
-- **Counselling Centre Focus**: Designed specifically for mental health counselling
-- **Role-Based Access**: Separate dashboards for counsellors and management
-- **Professional Branding**: Consistent Mindmaris Counsellors India branding
-
-## Demo Data
-
-The app comes with sample data for demonstration purposes:
-- **Appointments**: Sample appointments with different statuses and dates
-- **Patients**: Mock patient data with various mental health conditions
-- **Reports**: Sample counsellor reports and assessments
-- **Profiles**: Demo counsellor and management profiles
+- **Create React App** - Development setup
 
 ## URL Structure
 
-- `/` - Landing page with dashboard selection
-- `/psychologists` - Counsellor dashboard
+- `/` - Landing page
+- `/psychologists` - Doctors dashboard
 - `/management` - Management dashboard
 
-## Contributing
+## Data Models
 
-This is a proof-of-concept (POC) for Mindmaris Counsellors India. Feel free to submit issues and enhancement requests!
+### Appointment
+```javascript
+{
+  id: number,
+  patientName: string,
+  time: string,
+  status: 'pending' | 'completed',
+  type: string,
+  notes: string,
+  date: string,
+  patientDetails: {
+    age: number,
+    phone: string,
+    email: string,
+    condition: string,
+    lastVisit: string
+  }
+}
+```
 
-## License
+### Patient
+```javascript
+{
+  id: number,
+  name: string,
+  age: number,
+  phone: string,
+  email: string,
+  condition: string
+}
+```
 
-This project is proprietary to Mindmaris Counsellors India. 
+### Doctor
+```javascript
+{
+  id: number,
+  name: string,
+  specialization: string,
+  availability: string,
+  patients: number
+}
+```
+
+### Report
+```javascript
+{
+  id: number,
+  title: string,
+  patient: string,
+  doctor: string,
+  date: string,
+  status: 'pending' | 'completed'
+}
+```
+
+## Installation & Deployment
+
+### Local Development
+```bash
+npm install
+npm start
+```
+
+### Production Build
+```bash
+npm run build
+```
+
+### Netlify Deployment
+- Build command: `npm run build`
+- Publish directory: `build`
+- Redirects: `/* /index.html 200`
+
+## Current Limitations
+
+- Client-side only (no backend integration)
+- File uploads are simulated
+- Data persistence limited to localStorage
+- No authentication system
+- No real-time updates
+
+## Demo Data
+
+The application includes sample data for:
+- 5 appointments with different statuses and dates
+- 4 patients with various conditions
+- 4 doctors with specializations
+- 3 sample reports
+- Weekly earnings data 
