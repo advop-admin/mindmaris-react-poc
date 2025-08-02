@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Users, FileText, User, Bell, Search, Plus, CheckCircle, Download, BarChart3, Settings, X, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Users, FileText, User, Search, Plus, Download, BarChart3, Settings, X, LogOut } from 'lucide-react';
 
 const ManagementApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
