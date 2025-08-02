@@ -275,7 +275,7 @@ const PsychologistApp = () => {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-white to-gray-50 text-gray-900 p-4 rounded-lg shadow-sm">
-        <h1 className="text-xl font-bold text-blue-600">Good Morning, Dr. Smith</h1>
+        <h1 className="text-xl font-bold text-teal-600">Good Morning, Dr. Smith</h1>
         <p className="text-gray-600">Wednesday, January 8, 2025</p>
       </div>
 
@@ -283,8 +283,8 @@ const PsychologistApp = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white p-4 rounded-lg shadow-sm border">
           <div className="flex items-center space-x-3">
-            <div className="bg-blue-100 p-2 rounded-full">
-              <Clock className="h-5 w-5 text-blue-600" />
+                          <div className="bg-teal-100 p-2 rounded-full">
+                <Clock className="h-5 w-5 text-teal-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{appointments.length}</p>
@@ -326,7 +326,7 @@ const PsychologistApp = () => {
                 </span>
                 <button
                   onClick={() => openAppointmentDetail(appointment)}
-                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                  className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
                 >
                   View
                 </button>
@@ -337,7 +337,7 @@ const PsychologistApp = () => {
         <div className="p-4 border-t">
           <button 
             onClick={() => setCurrentPage('schedule')}
-            className="w-full text-blue-600 font-medium text-sm hover:bg-blue-50 py-2 rounded"
+            className="w-full text-teal-600 font-medium text-sm hover:bg-teal-50 py-2 rounded"
           >
             View All Appointments
           </button>
@@ -350,7 +350,7 @@ const PsychologistApp = () => {
           onClick={() => setCurrentPage('schedule')}
           className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
         >
-          <Calendar className="h-6 w-6 text-blue-600 mb-2" />
+          <Calendar className="h-6 w-6 text-teal-600 mb-2" />
           <p className="font-medium text-gray-900">Manage Appointments</p>
           <p className="text-sm text-gray-600">View, start, complete & report</p>
         </button>
@@ -402,9 +402,9 @@ const PsychologistApp = () => {
                   onClick={() => setSelectedDate(date)}
                   className={`py-2 text-sm rounded-lg transition-colors ${
                     date === selectedDate 
-                      ? 'bg-blue-600 text-white font-bold' 
+                      ? 'bg-teal-600 text-white font-bold' 
                       : hasAppointments 
-                        ? 'text-blue-800 hover:bg-gray-100 font-bold' 
+                        ? 'text-teal-800 hover:bg-gray-100 font-bold' 
                         : 'text-gray-900 hover:bg-gray-100'
                   }`}
                 >
@@ -424,7 +424,7 @@ const PsychologistApp = () => {
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
                     <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                    <p className="text-sm text-blue-600 mt-1">{appointment.type}</p>
+                    <p className="text-sm text-teal-600 mt-1">{appointment.type}</p>
                     {appointment.notes && (
                       <p className="text-sm text-gray-500 mt-1">Notes: {appointment.notes}</p>
                     )}
@@ -435,7 +435,7 @@ const PsychologistApp = () => {
                     </span>
                     <button
                       onClick={() => openAppointmentDetail(appointment)}
-                      className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                      className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
                     >
                       Details
                     </button>
@@ -548,13 +548,13 @@ const PsychologistApp = () => {
                 <div className="space-y-3">
                   <button
                     onClick={() => markAppointmentComplete(selectedAppointment.id)}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
                   >
                     Mark as Completed
                   </button>
                   <button
                     onClick={() => openReportModal(selectedAppointment)}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
                   >
                     Submit Report
                   </button>
@@ -563,7 +563,7 @@ const PsychologistApp = () => {
               {selectedAppointment.status === 'completed' && (
                 <button
                   onClick={() => openReportModal(selectedAppointment)}
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
                 >
                   View/Edit Report
                 </button>
@@ -589,8 +589,8 @@ const PsychologistApp = () => {
       
       <div className="bg-white rounded-lg shadow-sm border p-4">
         <div className="flex items-center space-x-4 mb-6">
-          <div className="bg-blue-100 p-3 rounded-full">
-            <User className="h-8 w-8 text-blue-600" />
+          <div className="bg-teal-100 p-3 rounded-full">
+            <User className="h-8 w-8 text-teal-600" />
           </div>
           <div>
             <h2 className="font-medium text-gray-900">{profile.name}</h2>
@@ -644,9 +644,9 @@ const PsychologistApp = () => {
       {/* Top Header */}
       <div className="bg-white text-gray-900 p-4 flex items-center justify-between border-b border-gray-200">
                   <div className="flex items-center space-x-3">
-            <div className="bg-blue-600 p-1 rounded">
+            <div className="bg-teal-500 p-1 rounded">
               <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                <span className="text-blue-600 text-xs font-bold">M</span>
+                <span className="text-teal-500 text-xs font-bold">M</span>
               </div>
             </div>
             <span className="font-semibold text-gray-900">Mindmaris Counsellors India</span>
@@ -654,7 +654,7 @@ const PsychologistApp = () => {
         <div className="flex items-center space-x-3">
           <button
             id="notification-bell"
-            className="hover:bg-gray-100 p-1 rounded transition-colors relative"
+            className="hover:bg-teal-50 p-1 rounded transition-colors relative"
             onClick={handleNotificationClick}
           >
             <Bell className="h-5 w-5" />
@@ -704,7 +704,7 @@ const PsychologistApp = () => {
                   </div>
                 </div>
                 <div className="mt-2 pt-2 border-t border-gray-50">
-                  <button className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                  <button className="w-full text-center text-xs text-teal-600 hover:text-teal-700 font-medium transition-colors">
                     View All
                   </button>
                 </div>
@@ -731,7 +731,7 @@ const PsychologistApp = () => {
               key={id}
               onClick={() => setCurrentPage(id)}
               className={`flex flex-col items-center py-2 px-3 transition-colors ${
-                currentPage === id ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
+                currentPage === id ? 'text-teal-600' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -795,7 +795,7 @@ const PsychologistApp = () => {
                   rows={3}
                   value={formData.reportNotes}
                   onChange={(e) => setFormData(prev => ({ ...prev, reportNotes: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
                 />
               </div>
               
@@ -815,7 +815,7 @@ const PsychologistApp = () => {
                     setShowReportModal(false);
                     setSelectedAppointment(null);
                   }}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
                 >
                   Submit Report
                 </button>
@@ -836,7 +836,7 @@ const PsychologistApp = () => {
             <p className="text-gray-600 mb-6">{alertMessage}</p>
             <button
               onClick={() => setShowAlertModal(false)}
-              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
             >
               OK
             </button>

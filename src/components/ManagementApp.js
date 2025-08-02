@@ -282,7 +282,7 @@ const ManagementApp = () => {
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-white to-gray-50 text-gray-900 p-4 rounded-lg shadow-sm">
-        <h1 className="text-xl font-bold text-blue-600">Hospital Management Dashboard</h1>
+        <h1 className="text-xl font-bold text-teal-600">Hospital Management Dashboard</h1>
         <p className="text-gray-600">Wednesday, January 8, 2025</p>
       </div>
 
@@ -290,8 +290,8 @@ const ManagementApp = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white p-4 rounded-lg shadow-sm border">
           <div className="flex items-center space-x-3">
-            <div className="bg-blue-100 p-2 rounded-full">
-              <Calendar className="h-5 w-5 text-blue-600" />
+            <div className="bg-teal-100 p-2 rounded-full">
+              <Calendar className="h-5 w-5 text-teal-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{appointments.length}</p>
@@ -337,7 +337,7 @@ const ManagementApp = () => {
                 <p className="text-sm text-gray-600">{doctor.specialization}</p>
               </div>
               <div className="text-right">
-                <p className="font-medium text-blue-600">{doctor.patients}</p>
+                <p className="font-medium text-teal-600">{doctor.patients}</p>
                 <p className="text-xs text-gray-600">Patients</p>
               </div>
             </div>
@@ -346,7 +346,7 @@ const ManagementApp = () => {
         <div className="p-4 border-t">
           <button 
             onClick={() => setCurrentPage('doctors')}
-            className="w-full text-blue-600 font-medium text-sm hover:bg-blue-50 py-2 rounded"
+            className="w-full text-teal-600 font-medium text-sm hover:bg-teal-50 py-2 rounded"
           >
             View All Doctors
           </button>
@@ -359,7 +359,7 @@ const ManagementApp = () => {
           onClick={() => setCurrentPage('patients')}
           className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
         >
-          <Users className="h-6 w-6 text-blue-600 mb-2" />
+          <Users className="h-6 w-6 text-teal-600 mb-2" />
           <p className="font-medium text-gray-900">Patient Management</p>
           <p className="text-sm text-gray-600">Add & manage patients</p>
         </button>
@@ -368,7 +368,7 @@ const ManagementApp = () => {
           onClick={() => setCurrentPage('appointments')}
           className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
         >
-          <Calendar className="h-6 w-6 text-blue-600 mb-2" />
+          <Calendar className="h-6 w-6 text-teal-600 mb-2" />
           <p className="font-medium text-gray-900">Appointments</p>
           <p className="text-sm text-gray-600">Schedule & manage</p>
         </button>
@@ -382,7 +382,7 @@ const ManagementApp = () => {
         <h1 className="text-xl font-bold text-gray-900">Patient Management</h1>
         <button 
           onClick={() => openModal('patient')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
         >
           <Plus className="h-5 w-5" />
         </button>
@@ -395,7 +395,7 @@ const ManagementApp = () => {
           placeholder="Search patients..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
         />
       </div>
 
@@ -403,14 +403,14 @@ const ManagementApp = () => {
         {filteredPatients.map(patient => (
           <div key={patient.id} className="bg-white rounded-lg shadow-sm border p-4">
             <div className="flex items-start space-x-3">
-              <div className="bg-blue-100 p-2 rounded-full">
-                <User className="h-5 w-5 text-blue-600" />
+              <div className="bg-teal-100 p-2 rounded-full">
+                <User className="h-5 w-5 text-teal-600" />
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">{patient.name}</h3>
                 <p className="text-sm text-gray-600">Age: {patient.age} • Phone: {patient.phone}</p>
                 <p className="text-sm text-gray-600">Email: {patient.email}</p>
-                <p className="text-sm text-blue-600 mt-1">Condition: {patient.condition}</p>
+                <p className="text-sm text-teal-600 mt-1">Condition: {patient.condition}</p>
               </div>
               <button 
                 onClick={() => editPatient(patient)}
@@ -431,7 +431,7 @@ const ManagementApp = () => {
         <h1 className="text-xl font-bold text-gray-900">Appointment Management</h1>
         <button 
           onClick={() => openModal('appointment')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
         >
           <Plus className="h-5 w-5" />
         </button>
@@ -444,7 +444,7 @@ const ManagementApp = () => {
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
                 <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                <p className="text-sm text-blue-600 mt-1">Doctor: {appointment.doctor}</p>
+                <p className="text-sm text-teal-600 mt-1">Doctor: {appointment.doctor}</p>
                 <p className="text-sm text-gray-600 mt-1">Type: {appointment.type}</p>
               </div>
               <div className="flex flex-col items-end space-y-2">
@@ -471,7 +471,7 @@ const ManagementApp = () => {
         <h1 className="text-xl font-bold text-gray-900">Doctor Management</h1>
         <button 
           onClick={() => openModal('doctor')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
         >
           <Plus className="h-5 w-5" />
         </button>
@@ -488,7 +488,7 @@ const ManagementApp = () => {
                 <h3 className="font-medium text-gray-900">{doctor.name}</h3>
                 <p className="text-sm text-gray-600">Specialization: {doctor.specialization}</p>
                 <p className="text-sm text-gray-600">Availability: {doctor.availability}</p>
-                <p className="text-sm text-blue-600 mt-1">Active Patients: {doctor.patients}</p>
+                <p className="text-sm text-teal-600 mt-1">Active Patients: {doctor.patients}</p>
               </div>
               <button 
                 onClick={() => editDoctor(doctor)}
@@ -514,7 +514,7 @@ const ManagementApp = () => {
               <div className="flex-1">
                 <h3 className="font-medium text-gray-900">{report.title}</h3>
                 <p className="text-sm text-gray-600 mt-1">Patient: {report.patient}</p>
-                <p className="text-sm text-blue-600 mt-1">Doctor: {report.doctor}</p>
+                <p className="text-sm text-teal-600 mt-1">Doctor: {report.doctor}</p>
                 <p className="text-sm text-gray-600 mt-1">Date: {report.date}</p>
               </div>
               <div className="flex flex-col items-end space-y-2">
@@ -523,7 +523,7 @@ const ManagementApp = () => {
                 </span>
                 <button
                   onClick={() => downloadReport(report.id)}
-                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                  className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors flex items-center space-x-1"
                 >
                   <Download className="h-3 w-3" />
                   <span>PDF</span>
@@ -550,8 +550,8 @@ const ManagementApp = () => {
       
       <div className="bg-white rounded-lg shadow-sm border p-4">
         <div className="flex items-center space-x-4 mb-6">
-          <div className="bg-blue-100 p-3 rounded-full">
-            <User className="h-8 w-8 text-blue-600" />
+          <div className="bg-teal-100 p-3 rounded-full">
+            <User className="h-8 w-8 text-teal-600" />
           </div>
           <div>
             <h2 className="font-medium text-gray-900">{profile.name}</h2>
@@ -613,9 +613,9 @@ const ManagementApp = () => {
       {/* Top Header */}
       <div className="bg-white text-gray-900 p-4 flex items-center justify-between border-b border-gray-200">
                   <div className="flex items-center space-x-3">
-            <div className="bg-blue-600 p-1 rounded">
+            <div className="bg-teal-600 p-1 rounded">
               <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-                <span className="text-blue-600 text-xs font-bold">M</span>
+                <span className="text-teal-600 text-xs font-bold">M</span>
               </div>
             </div>
             <span className="font-semibold text-gray-900">Mindmaris Counsellors India</span>
@@ -644,7 +644,7 @@ const ManagementApp = () => {
               key={id}
               onClick={() => setCurrentPage(id)}
               className={`flex flex-col items-center py-2 px-3 transition-colors ${
-                currentPage === id ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'
+                currentPage === id ? 'text-teal-600' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -663,35 +663,35 @@ const ManagementApp = () => {
               placeholder="Patient Name"
               value={formData.patientName}
               onChange={(e) => handleFormChange('patientName', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="number"
               placeholder="Age"
               value={formData.patientAge}
               onChange={(e) => handleFormChange('patientAge', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="tel"
               placeholder="Phone Number"
               value={formData.patientPhone}
               onChange={(e) => handleFormChange('patientPhone', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="email"
               placeholder="Email (Optional)"
               value={formData.patientEmail}
               onChange={(e) => handleFormChange('patientEmail', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Condition (Optional)"
               value={formData.patientCondition}
               onChange={(e) => handleFormChange('patientCondition', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <div className="flex space-x-3 pt-4">
               <button
@@ -702,7 +702,7 @@ const ManagementApp = () => {
               </button>
               <button
                 onClick={addPatient}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
                 {editingItem ? "Update Patient" : "Add Patient"}
               </button>
@@ -717,7 +717,7 @@ const ManagementApp = () => {
             <select
               value={formData.patientName}
               onChange={(e) => handleFormChange('patientName', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             >
               <option value="">Select Patient</option>
               {patients.map(patient => (
@@ -727,7 +727,7 @@ const ManagementApp = () => {
             <select
               value={formData.selectedDoctor}
               onChange={(e) => handleFormChange('selectedDoctor', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             >
               <option value="">Select Doctor</option>
               {doctors.map(doctor => (
@@ -738,12 +738,12 @@ const ManagementApp = () => {
               type="time"
               value={formData.appointmentTime}
               onChange={(e) => handleFormChange('appointmentTime', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <select
               value={formData.appointmentType}
               onChange={(e) => handleFormChange('appointmentType', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             >
               <option value="">Select Type</option>
               <option value="Initial Consultation">Initial Consultation</option>
@@ -760,7 +760,7 @@ const ManagementApp = () => {
               </button>
               <button
                 onClick={addAppointment}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
                 {editingItem ? "Update Appointment" : "Schedule"}
               </button>
@@ -777,21 +777,21 @@ const ManagementApp = () => {
               placeholder="Doctor Name"
               value={formData.doctorName}
               onChange={(e) => handleFormChange('doctorName', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Specialization"
               value={formData.doctorSpecialization}
               onChange={(e) => handleFormChange('doctorSpecialization', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <input
               type="text"
               placeholder="Availability (e.g., Mon-Fri 9AM-5PM)"
               value={formData.doctorAvailability}
               onChange={(e) => handleFormChange('doctorAvailability', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
             <div className="flex space-x-3 pt-4">
               <button
@@ -802,7 +802,7 @@ const ManagementApp = () => {
               </button>
               <button
                 onClick={addDoctor}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
                 {editingItem ? "Update Doctor" : "Add Doctor"}
               </button>

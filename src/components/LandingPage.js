@@ -4,12 +4,12 @@ import { User, Settings, ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="bg-teal-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-white text-2xl font-bold">M</span>
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Mindmaris Counsellors India</h1>
@@ -20,7 +20,7 @@ const LandingPage = () => {
           <div className="space-y-4">
             <Link
               to="/psychologists"
-              className="block bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="block bg-gradient-to-r from-teal-600 to-teal-700 text-white p-6 rounded-xl hover:from-teal-700 hover:to-teal-800 transition-all duration-200 transform hover:scale-105 shadow-lg"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
@@ -29,7 +29,7 @@ const LandingPage = () => {
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold">Doctors Dashboard</h2>
-                    <p className="text-blue-100 text-sm">Manage patients, appointments & reports</p>
+                    <p className="text-teal-100 text-sm">Manage patients, appointments & reports</p>
                   </div>
                 </div>
                 <ArrowRight className="h-5 w-5" />
