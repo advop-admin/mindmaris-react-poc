@@ -8,7 +8,7 @@ const ManagementApp = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingItem, setEditingItem] = useState(null);
 
-  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
+
   
   const [appointments, setAppointments] = useState([
       { id: 1, patientName: 'Sarah Johnson', doctor: 'Dr. Smith', time: '09:00 AM', status: 'pending', type: 'Initial Consultation' },
@@ -589,21 +589,7 @@ const ManagementApp = () => {
     </div>
   );
 
-  const handleNotificationClick = () => {
-    setShowNotificationDropdown((prev) => !prev);
-  };
 
-  useEffect(() => {
-    if (!showNotificationDropdown) return;
-    function handleClick(e) {
-      if (!document.getElementById('notification-dropdown')?.contains(e.target) &&
-          !document.getElementById('notification-bell')?.contains(e.target)) {
-        setShowNotificationDropdown(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [showNotificationDropdown]);
 
   const handleLogout = () => {
     // Redirect to landing page
@@ -634,77 +620,7 @@ const ManagementApp = () => {
           </div>
           <span className="font-semibold">Mindmaris Counsellors India</span>
         </div>
-        <div className="flex items-center space-x-3 relative">
-          <button
-            id="notification-bell"
-            className="hover:bg-blue-700 p-1 rounded transition-colors relative"
-            onClick={handleNotificationClick}
-          >
-            <Bell className="h-5 w-5" />
-          </button>
-          {showNotificationDropdown && (
-            <div
-              id="notification-dropdown"
-              className="absolute left-1/2 -translate-x-1/2 mt-2 w-80 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transform transition-all duration-200 ease-out"
-            >
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">4 new</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Users className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">New Patient Registration</p>
-                      <p className="text-xs text-gray-600 mt-1">New appointment request from Sarah Johnson.</p>
-                      <p className="text-xs text-gray-500 mt-1">1 minute ago</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">Report Completed</p>
-                      <p className="text-xs text-gray-600 mt-1">Dr. Smith completed assessment report.</p>
-                      <p className="text-xs text-gray-500 mt-1">3 minutes ago</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <User className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">New Patient Added</p>
-                      <p className="text-xs text-gray-600 mt-1">New patient registration: James Wilson.</p>
-                      <p className="text-xs text-gray-500 mt-1">8 minutes ago</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Calendar className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">Schedule Update</p>
-                      <p className="text-xs text-gray-600 mt-1">Dr. Wilson requested schedule change.</p>
-                      <p className="text-xs text-gray-500 mt-1">15 minutes ago</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                  <button className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">
-                    View All Notifications
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="flex items-center space-x-3">
         </div>
       </div>
 

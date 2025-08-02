@@ -662,50 +662,50 @@ const PsychologistApp = () => {
           {showNotificationDropdown && (
             <div
               id="notification-dropdown"
-              className="absolute left-1/2 -translate-x-1/2 mt-2 w-80 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transform transition-all duration-200 ease-out"
+              className="absolute left-1/2 -translate-x-1/2 mt-2 w-72 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-sm border border-gray-100 z-50 transform transition-all duration-200 ease-out"
             >
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">3 new</span>
+              <div className="p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium text-gray-900 text-sm">Notifications</h3>
+                  <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">3</span>
                 </div>
-                <div className="space-y-2">
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <Clock className="h-4 w-4 text-gray-600" />
+                <div className="space-y-1">
+                  <div className="flex items-start space-x-2 p-2 hover:bg-gray-50 rounded transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-6 h-6 bg-gray-50 rounded flex items-center justify-center">
+                      <Clock className="h-3 w-3 text-gray-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">Appointment Reminder</p>
-                      <p className="text-xs text-gray-600 mt-1">Your 9:00 AM appointment is coming up soon.</p>
-                      <p className="text-xs text-gray-500 mt-1">2 minutes ago</p>
+                      <p className="text-xs font-medium text-gray-900">Appointment Reminder</p>
+                      <p className="text-xs text-gray-500">Your 9:00 AM appointment is coming up soon.</p>
+                      <p className="text-xs text-gray-400">2 minutes ago</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="h-4 w-4 text-gray-600" />
+                  <div className="flex items-start space-x-2 p-2 hover:bg-gray-50 rounded transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-6 h-6 bg-gray-50 rounded flex items-center justify-center">
+                      <CheckCircle className="h-3 w-3 text-gray-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">Session Completed</p>
-                      <p className="text-xs text-gray-600 mt-1">James Wilson's session marked as complete.</p>
-                      <p className="text-xs text-gray-500 mt-1">5 minutes ago</p>
+                      <p className="text-xs font-medium text-gray-900">Session Completed</p>
+                      <p className="text-xs text-gray-500">James Wilson's session marked as complete.</p>
+                      <p className="text-xs text-gray-400">5 minutes ago</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <FileText className="h-4 w-4 text-gray-600" />
+                  <div className="flex items-start space-x-2 p-2 hover:bg-gray-50 rounded transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-6 h-6 bg-gray-50 rounded flex items-center justify-center">
+                      <FileText className="h-3 w-3 text-gray-500" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">Report Uploaded</p>
-                      <p className="text-xs text-gray-600 mt-1">New report uploaded for Sarah Johnson.</p>
-                      <p className="text-xs text-gray-500 mt-1">10 minutes ago</p>
+                      <p className="text-xs font-medium text-gray-900">Report Uploaded</p>
+                      <p className="text-xs text-gray-500">New report uploaded for Sarah Johnson.</p>
+                      <p className="text-xs text-gray-400">10 minutes ago</p>
                     </div>
                   </div>
                 </div>
-                <div className="mt-3 pt-3 border-t border-gray-100">
+                <div className="mt-2 pt-2 border-t border-gray-50">
                   <button className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">
-                    View All Notifications
+                    View All
                   </button>
                 </div>
               </div>
