@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Users, FileText, User, Bell, Search, Plus, Clock, CheckCircle, Upload, Camera, Menu, Home, Settings, X } from 'lucide-react';
+import { Calendar, Users, FileText, User, Bell, Search, Plus, Clock, CheckCircle, Upload, Camera, Menu, Home, Settings, X, LogOut, MessageSquare, Edit, Eye, ArrowLeft } from 'lucide-react';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -7,135 +7,268 @@ const PsychologistApp = () => {
   const [modalType, setModalType] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState(8);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   
-  const [appointments, setAppointments] = useState([
-    { id: 1, patientName: 'Sarah Johnson', time: '09:00 AM', status: 'pending', type: 'Initial Consultation' },
-    { id: 2, patientName: 'Michael Chen', time: '10:30 AM', status: 'completed', type: 'Follow-up' },
-    { id: 3, patientName: 'Emily Davis', time: '02:00 PM', status: 'in-progress', type: 'Therapy Session' },
-    { id: 4, patientName: 'James Wilson', time: '03:30 PM', status: 'pending', type: 'Assessment' }
-  ]);
+  // Load appointments from localStorage or use default data
+  const getInitialAppointments = () => {
+    const savedAppointments = localStorage.getItem('mindmaris_appointments');
+    if (savedAppointments) {
+      return JSON.parse(savedAppointments);
+    }
+    return [
+    { 
+      id: 1, 
+      patientName: 'Sarah Johnson', 
+      time: '09:00 AM', 
+      status: 'pending', 
+      type: 'Initial Consultation', 
+      notes: 'Patient experiencing anxiety symptoms',
+      date: '2025-01-08',
+      patientDetails: {
+        age: 28,
+        phone: '+1-555-0123',
+        email: 'sarah@email.com',
+        condition: 'Anxiety Disorder',
+        lastVisit: '2025-01-08'
+      }
+    },
+    { 
+      id: 2, 
+      patientName: 'Michael Chen', 
+      time: '10:30 AM', 
+      status: 'completed', 
+      type: 'Follow-up', 
+      notes: 'Depression treatment progress',
+      date: '2025-01-08',
+      patientDetails: {
+        age: 35,
+        phone: '+1-555-0124',
+        email: 'michael@email.com',
+        condition: 'Depression',
+        lastVisit: '2025-01-08'
+      }
+    },
+    { 
+      id: 3, 
+      patientName: 'Emily Davis', 
+      time: '02:00 PM', 
+      status: 'pending', 
+      type: 'Therapy Session', 
+      notes: 'PTSD therapy session',
+      date: '2025-01-08',
+      patientDetails: {
+        age: 42,
+        phone: '+1-555-0125',
+        email: 'emily@email.com',
+        condition: 'PTSD',
+        lastVisit: '2025-01-07'
+      }
+    },
+    { 
+      id: 4, 
+      patientName: 'James Wilson', 
+      time: '03:30 PM', 
+      status: 'pending', 
+      type: 'Assessment', 
+      notes: 'Bipolar disorder assessment',
+      date: '2025-01-08',
+      patientDetails: {
+        age: 31,
+        phone: '+1-555-0126',
+        email: 'james@email.com',
+        condition: 'Bipolar Disorder',
+        lastVisit: '2025-01-06'
+      }
+    },
+    { 
+      id: 5, 
+      patientName: 'Lisa Anderson', 
+      time: '11:00 AM', 
+      status: 'pending', 
+      type: 'Initial Consultation', 
+      notes: 'New patient consultation',
+      date: '2025-01-09',
+      patientDetails: {
+        age: 29,
+        phone: '+1-555-0127',
+        email: 'lisa@email.com',
+        condition: 'Stress Management',
+        lastVisit: '2025-01-09'
+      }
+    },
+    { 
+      id: 6, 
+      patientName: 'David Brown', 
+      time: '01:30 PM', 
+      status: 'pending', 
+      type: 'Therapy Session', 
+      notes: 'Anxiety therapy session',
+      date: '2025-01-09',
+      patientDetails: {
+        age: 38,
+        phone: '+1-555-0128',
+        email: 'david@email.com',
+        condition: 'Anxiety Disorder',
+        lastVisit: '2025-01-09'
+      }
+    },
+    { 
+      id: 7, 
+      patientName: 'Maria Garcia', 
+      time: '10:00 AM', 
+      status: 'completed', 
+      type: 'Follow-up', 
+      notes: 'Depression follow-up',
+      date: '2025-01-10',
+      patientDetails: {
+        age: 45,
+        phone: '+1-555-0129',
+        email: 'maria@email.com',
+        condition: 'Depression',
+        lastVisit: '2025-01-10'
+      }
+    }
+  ];
+  };
 
-  const [patients, setPatients] = useState([
-    { id: 1, name: 'Sarah Johnson', age: 28, lastVisit: '2025-01-08', condition: 'Anxiety Disorder' },
-    { id: 2, name: 'Michael Chen', age: 35, lastVisit: '2025-01-08', condition: 'Depression' },
-    { id: 3, name: 'Emily Davis', age: 42, lastVisit: '2025-01-07', condition: 'PTSD' },
-    { id: 4, name: 'James Wilson', age: 31, lastVisit: '2025-01-06', condition: 'Bipolar Disorder' }
-  ]);
+  const [appointments, setAppointments] = useState(getInitialAppointments());
 
-  const [reports, setReports] = useState([
-    { id: 1, title: 'Assessment Report #1', patient: 'Sarah Johnson', date: 'Jan 7, 2025' },
-    { id: 2, title: 'Assessment Report #2', patient: 'Sarah Johnson', date: 'Jan 6, 2025' },
-    { id: 3, title: 'Assessment Report #3', patient: 'Sarah Johnson', date: 'Jan 5, 2025' }
-  ]);
+  // Save appointments to localStorage whenever they change
+  const saveAppointmentsToStorage = (newAppointments) => {
+    localStorage.setItem('mindmaris_appointments', JSON.stringify(newAppointments));
+  };
+
+  // Load reports from localStorage or use default data
+  const getInitialReports = () => {
+    const savedReports = localStorage.getItem('mindmaris_reports');
+    if (savedReports) {
+      return JSON.parse(savedReports);
+    }
+    return [
+    { id: 1, title: 'Assessment Report #1', patient: 'Sarah Johnson', date: 'Jan 7, 2025', status: 'completed', content: 'Initial assessment completed. Patient shows signs of anxiety disorder.' },
+    { id: 2, title: 'Assessment Report #2', patient: 'Sarah Johnson', date: 'Jan 6, 2025', status: 'completed', content: 'Follow-up session. Patient responding well to treatment.' },
+    { id: 3, title: 'Assessment Report #3', patient: 'Sarah Johnson', date: 'Jan 5, 2025', status: 'completed', content: 'Therapy session notes and progress assessment.' }
+  ];
+  };
+
+  const [reports, setReports] = useState(getInitialReports());
+
+  // Save reports to localStorage whenever they change
+  const saveReportsToStorage = (newReports) => {
+    localStorage.setItem('mindmaris_reports', JSON.stringify(newReports));
+  };
 
   const [formData, setFormData] = useState({
-    patientName: '',
-    time: '',
-    type: '',
-    name: '',
-    age: '',
-    condition: '',
     reportTitle: '',
     reportNotes: '',
-    selectedPatient: ''
+    selectedPatient: '',
+    appointmentNotes: ''
   });
 
   const [profile, setProfile] = useState({
     name: 'Dr. Sarah Smith',
-    title: 'Clinical Psychologist',
-    email: 'dr.smith@hospital.com',
+    title: 'Clinical Counsellor',
+    email: 'dr.smith@mindmaris.com',
     phone: '+1 (555) 123-4567',
-    department: 'Mental Health Services'
+    department: 'Mental Health Counselling',
+    specialization: 'Anxiety & Depression',
+    experience: '8 years',
+    education: 'Ph.D. Clinical Psychology'
   });
 
-  const markAppointmentComplete = (id) => {
-    setAppointments(prev => prev.map(apt => 
-      apt.id === id ? { ...apt, status: 'completed' } : apt
-    ));
+  const showAlert = (message) => {
+    setAlertMessage(message);
+    setShowAlertModal(true);
   };
 
-  const openModal = (type) => {
-    setModalType(type);
-    setShowAddModal(true);
+  const markAppointmentComplete = (id) => {
+    const updatedAppointments = appointments.map(apt => 
+      apt.id === id ? { ...apt, status: 'completed' } : apt
+    );
+    setAppointments(updatedAppointments);
+    saveAppointmentsToStorage(updatedAppointments);
+    // Update selectedAppointment to reflect the new status
+    setSelectedAppointment(prev => 
+      prev && prev.id === id ? { ...prev, status: 'completed' } : prev
+    );
+    showAlert('Appointment completed successfully!');
+  };
+
+
+
+  const openAppointmentDetail = (appointment) => {
+    setSelectedAppointment(appointment);
+    setCurrentPage('appointment-detail');
+  };
+
+  const openReportModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowReportModal(true);
     setFormData({
-      patientName: '',
-      time: '',
-      type: '',
-      name: '',
-      age: '',
-      condition: '',
-      reportTitle: '',
+      reportTitle: `Report for ${appointment.patientName}`,
       reportNotes: '',
-      selectedPatient: ''
+      selectedPatient: appointment.patientName,
+      appointmentNotes: appointment.notes || ''
     });
   };
 
-  const closeModal = () => {
-    setShowAddModal(false);
-    setModalType('');
+  const closeReportModal = () => {
+    setShowReportModal(false);
+    setSelectedAppointment(null);
+    setFormData({
+      reportTitle: '',
+      reportNotes: '',
+      selectedPatient: '',
+      appointmentNotes: ''
+    });
   };
 
-  const handleFormChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleProfileChange = (field, value) => {
-    setProfile(prev => ({ ...prev, [field]: value }));
-  };
-
-  const addAppointment = () => {
-    if (formData.patientName && formData.time && formData.type) {
-      const newAppointment = {
-        id: appointments.length + 1,
-        patientName: formData.patientName,
-        time: formData.time,
-        status: 'pending',
-        type: formData.type
-      };
-      setAppointments(prev => [...prev, newAppointment]);
-      closeModal();
-    }
-  };
-
-  const addPatient = () => {
-    if (formData.name && formData.age && formData.condition) {
-      const newPatient = {
-        id: patients.length + 1,
-        name: formData.name,
-        age: parseInt(formData.age),
-        lastVisit: new Date().toISOString().split('T')[0],
-        condition: formData.condition
-      };
-      setPatients(prev => [...prev, newPatient]);
-      closeModal();
-    }
-  };
-
-  const addReport = () => {
-    if (formData.reportTitle && formData.selectedPatient) {
+  const submitReport = () => {
+    if (formData.reportTitle && formData.reportNotes) {
       const newReport = {
         id: reports.length + 1,
         title: formData.reportTitle,
         patient: formData.selectedPatient,
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        status: 'completed',
+        content: formData.reportNotes
       };
-      setReports(prev => [...prev, newReport]);
-      closeModal();
+      const updatedReports = [...reports, newReport];
+      setReports(updatedReports);
+      saveReportsToStorage(updatedReports);
+      
+      // Mark appointment as completed when report is submitted
+      if (selectedAppointment && selectedAppointment.status === 'pending') {
+        markAppointmentComplete(selectedAppointment.id);
+      }
+      
+      closeReportModal();
+      showAlert('Report submitted successfully!');
     }
   };
 
-  const filteredPatients = patients.filter(patient =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.condition.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    // Redirect to landing page
+    window.location.href = '/';
+  };
+
+  const filteredAppointments = appointments.filter(appointment =>
+    appointment.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    appointment.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -146,7 +279,7 @@ const PsychologistApp = () => {
       <div className="bg-white rounded-lg w-11/12 max-w-xs sm:max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>
-          <button onClick={onClose || closeModal} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -206,9 +339,17 @@ const PsychologistApp = () => {
                 <p className="font-medium text-gray-900">{appointment.patientName}</p>
                 <p className="text-sm text-gray-600">{appointment.time} • {appointment.type}</p>
               </div>
-              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                {appointment.status}
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                  {appointment.status}
+                </span>
+                <button
+                  onClick={() => openAppointmentDetail(appointment)}
+                  className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                >
+                  View
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -223,231 +364,250 @@ const PsychologistApp = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <button 
-          onClick={() => setCurrentPage('patients')}
+          onClick={() => setCurrentPage('schedule')}
           className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
         >
-          <Users className="h-6 w-6 text-blue-600 mb-2" />
-          <p className="font-medium text-gray-900">Patient Records</p>
-          <p className="text-sm text-gray-600">Manage patient files</p>
-        </button>
-        
-        <button 
-          onClick={() => setCurrentPage('reports')}
-          className="bg-white p-4 rounded-lg shadow-sm border text-left hover:bg-gray-50 transition-colors"
-        >
-          <FileText className="h-6 w-6 text-blue-600 mb-2" />
-          <p className="font-medium text-gray-900">Reports</p>
-          <p className="text-sm text-gray-600">Upload & manage</p>
+          <Calendar className="h-6 w-6 text-blue-600 mb-2" />
+          <p className="font-medium text-gray-900">Manage Appointments</p>
+          <p className="text-sm text-gray-600">View, start, complete & report</p>
         </button>
       </div>
     </div>
   );
 
-  const Schedule = () => (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Schedule</h1>
-        <button 
-          onClick={() => openModal('appointment')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
+  const Schedule = () => {
+    // Convert selected date to proper format for filtering
+    const getSelectedDateString = () => {
+      const currentYear = 2025;
+      const currentMonth = 1; // January
+      return `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}`;
+    };
 
-      {/* Calendar Header */}
-      <div className="bg-white rounded-lg shadow-sm border p-4">
-        <div className="grid grid-cols-7 gap-1 text-center mb-4">
-          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-            <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1 text-center">
-          {[6, 7, 8, 9, 10, 11, 12].map(date => (
-            <button
-              key={date}
-              onClick={() => setSelectedDate(date)}
-              className={`py-2 text-sm rounded-lg transition-colors ${
-                date === selectedDate ? 'bg-blue-600 text-white' : 'text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              {date}
-            </button>
-          ))}
-        </div>
-      </div>
+    // Filter appointments for selected date
+    const filteredAppointments = appointments.filter(appointment => 
+      appointment.date === getSelectedDateString()
+    );
 
-      {/* Appointments List */}
-      <div className="space-y-3">
-        {appointments.map(appointment => (
-          <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
-                <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                <p className="text-sm text-blue-600 mt-1">{appointment.type}</p>
-              </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                  {appointment.status}
-                </span>
-                {appointment.status === 'pending' && (
-                  <button
-                    onClick={() => markAppointmentComplete(appointment.id)}
-                    className="text-xs bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 transition-colors"
-                  >
-                    Mark Complete
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const Patients = () => (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Patients</h1>
-        <button 
-          onClick={() => openModal('patient')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search patients..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
-
-      <div className="space-y-3">
-        {filteredPatients.map(patient => (
-          <div key={patient.id} className="bg-white rounded-lg shadow-sm border p-4">
-            <div className="flex items-start space-x-3">
-              <div className="bg-blue-100 p-2 rounded-full">
-                <User className="h-5 w-5 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{patient.name}</h3>
-                <p className="text-sm text-gray-600">Age: {patient.age}</p>
-                <p className="text-sm text-gray-600">Condition: {patient.condition}</p>
-                <p className="text-sm text-blue-600 mt-1">Last visit: {patient.lastVisit}</p>
-              </div>
-              <button className="text-gray-400 hover:text-gray-600 transition-colors">
-                <Menu className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const Reports = () => (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Reports</h1>
-        <button 
-          onClick={() => openModal('report')}
-          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Upload className="h-5 w-5" />
-        </button>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-sm border p-4">
-        <h2 className="font-medium text-gray-900 mb-3">Upload New Report</h2>
-        <div className="space-y-3">
-          <select 
-            value={formData.selectedPatient}
-            onChange={(e) => handleFormChange('selectedPatient', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">Select Patient</option>
-            {patients.map(patient => (
-              <option key={patient.id} value={patient.name}>{patient.name}</option>
-            ))}
-          </select>
-          
-          <input
-            type="text"
-            placeholder="Report title"
-            value={formData.reportTitle}
-            onChange={(e) => handleFormChange('reportTitle', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          
-          <textarea
-            placeholder="Report notes..."
-            rows={4}
-            value={formData.reportNotes}
-            onChange={(e) => handleFormChange('reportNotes', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          
-          <div className="flex space-x-3">
-            <button 
-              onClick={() => alert('Camera feature would be implemented here')}
-              className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-200 transition-colors"
-            >
-              <Camera className="h-4 w-4" />
-              <span>Photo</span>
-            </button>
-            <button 
-              onClick={() => alert('File upload would be implemented here')}
-              className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-200 transition-colors"
-            >
-              <Upload className="h-4 w-4" />
-              <span>File</span>
-            </button>
-          </div>
-          
+    return (
+      <div className="p-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold text-gray-900">Schedule</h1>
           <button 
-            onClick={addReport}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={handleLogout}
+            className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
           >
-            Save Report
+            <LogOut className="h-5 w-5" />
           </button>
         </div>
+
+        {/* Calendar Header */}
+        <div className="bg-white rounded-lg shadow-sm border p-4">
+          <div className="grid grid-cols-7 gap-1 text-center mb-4">
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+              <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1 text-center">
+            {[6, 7, 8, 9, 10, 11, 12].map(date => {
+              const dateString = `2025-01-${date.toString().padStart(2, '0')}`;
+              const appointmentsForDate = appointments.filter(apt => apt.date === dateString);
+              const hasAppointments = appointmentsForDate.length > 0;
+              
+              return (
+                <button
+                  key={date}
+                  onClick={() => setSelectedDate(date)}
+                  className={`py-2 text-sm rounded-lg transition-colors ${
+                    date === selectedDate 
+                      ? 'bg-blue-600 text-white font-bold' 
+                      : hasAppointments 
+                        ? 'text-blue-800 hover:bg-gray-100 font-bold' 
+                        : 'text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  {date}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Appointments List */}
+        <div className="space-y-3">
+          {filteredAppointments.length > 0 ? (
+            filteredAppointments.map(appointment => (
+              <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
+                    <p className="text-sm text-blue-600 mt-1">{appointment.type}</p>
+                    {appointment.notes && (
+                      <p className="text-sm text-gray-500 mt-1">Notes: {appointment.notes}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end space-y-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                      {appointment.status}
+                    </span>
+                    <button
+                      onClick={() => openAppointmentDetail(appointment)}
+                      className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                    >
+                      Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Appointments</h3>
+              <p className="text-gray-600">No appointments scheduled for January {selectedDate}, 2025</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const AppointmentDetail = () => (
+    <div className="p-4 space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <button 
+            onClick={() => setCurrentPage('schedule')}
+            className="text-gray-600 hover:text-gray-800 transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <h1 className="text-xl font-bold text-gray-900">Appointment Details</h1>
+        </div>
+        <button 
+          onClick={handleLogout}
+          className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+        >
+          <LogOut className="h-5 w-5" />
+        </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border">
-        <div className="p-4 border-b">
-          <h2 className="font-medium text-gray-900">Recent Reports</h2>
-        </div>
-        <div className="space-y-3 p-4">
-          {reports.map(report => (
-            <div key={report.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-              <div>
-                <p className="font-medium text-gray-900">{report.title}</p>
-                <p className="text-sm text-gray-600">{report.patient} • {report.date}</p>
+      {selectedAppointment && (
+        <>
+          {/* Appointment Info */}
+          <div className="bg-white rounded-lg shadow-sm border p-4">
+            <h2 className="font-semibold text-gray-900 mb-4">Appointment Information</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Patient:</span>
+                <span className="font-medium">{selectedAppointment.patientName}</span>
               </div>
-              <FileText className="h-5 w-5 text-gray-400" />
+              <div className="flex justify-between">
+                <span className="text-gray-600">Time:</span>
+                <span className="font-medium">{selectedAppointment.time}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Type:</span>
+                <span className="font-medium">{selectedAppointment.type}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Status:</span>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(selectedAppointment.status)}`}>
+                  {selectedAppointment.status}
+                </span>
+              </div>
+              {selectedAppointment.notes && (
+                <div className="pt-2 border-t">
+                  <span className="text-gray-600">Notes:</span>
+                  <p className="text-sm mt-1">{selectedAppointment.notes}</p>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+
+          {/* Patient Details */}
+          <div className="bg-white rounded-lg shadow-sm border p-4">
+            <h2 className="font-semibold text-gray-900 mb-4">Patient Information</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Name:</span>
+                <span className="font-medium">{selectedAppointment.patientName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Age:</span>
+                <span className="font-medium">{selectedAppointment.patientDetails.age}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Condition:</span>
+                <span className="font-medium">{selectedAppointment.patientDetails.condition}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Phone:</span>
+                <span className="font-medium">{selectedAppointment.patientDetails.phone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Email:</span>
+                <span className="font-medium">{selectedAppointment.patientDetails.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Last Visit:</span>
+                <span className="font-medium">{selectedAppointment.patientDetails.lastVisit}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Status Actions */}
+          <div className="bg-white rounded-lg shadow-sm border p-4">
+            <h2 className="font-semibold text-gray-900 mb-4">Actions</h2>
+            <div className="space-y-3">
+              {selectedAppointment.status === 'pending' && (
+                <div className="space-y-3">
+                  <button
+                    onClick={() => markAppointmentComplete(selectedAppointment.id)}
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    Mark as Completed
+                  </button>
+                  <button
+                    onClick={() => openReportModal(selectedAppointment)}
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    Submit Report
+                  </button>
+                </div>
+              )}
+              {selectedAppointment.status === 'completed' && (
+                <button
+                  onClick={() => openReportModal(selectedAppointment)}
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  View/Edit Report
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 
   const Profile = () => (
     <div className="p-4 space-y-4">
-      <h1 className="text-xl font-bold text-gray-900">Profile</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold text-gray-900">Profile</h1>
+        <button 
+          onClick={handleLogout}
+          className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+        >
+          <LogOut className="h-5 w-5" />
+        </button>
+      </div>
       
       <div className="bg-white rounded-lg shadow-sm border p-4">
-        <div className="flex items-center space-x-4 mb-4">
+        <div className="flex items-center space-x-4 mb-6">
           <div className="bg-blue-100 p-3 rounded-full">
             <User className="h-8 w-8 text-blue-600" />
           </div>
@@ -457,53 +617,17 @@ const PsychologistApp = () => {
           </div>
         </div>
         
-        <div className="space-y-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={profile.email}
-              className="w-full p-2 border border-gray-300 rounded-lg bg-gray-50"
-              readOnly
-            />
+        <div className="space-y-4">
+          <div className="flex justify-between items-center py-3 border-b border-gray-100">
+            <span className="text-sm font-medium text-gray-700">Email</span>
+            <span className="text-sm text-gray-900">{profile.email}</span>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-            <input
-              type="tel"
-              value={profile.phone}
-              onChange={(e) => handleProfileChange('phone', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-            <input
-              type="text"
-              value={profile.department}
-              className="w-full p-2 border border-gray-300 rounded-lg bg-gray-50"
-              readOnly
-            />
+          <div className="flex justify-between items-center py-3">
+            <span className="text-sm font-medium text-gray-700">Phone</span>
+            <span className="text-sm text-gray-900">{profile.phone}</span>
           </div>
         </div>
-        
-        <button 
-          onClick={() => alert('Profile updated successfully!')}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg mt-4 hover:bg-blue-700 transition-colors"
-        >
-          Update Profile
-        </button>
-      </div>
-    </div>
-  );
-
-  const SettingsPage = () => (
-    <div className="p-4 space-y-4">
-      <h1 className="text-xl font-bold text-gray-900">Settings</h1>
-      <div className="bg-white rounded-lg shadow-sm border p-4 text-gray-600 text-center">
-        Settings content goes here.
       </div>
     </div>
   );
@@ -512,7 +636,6 @@ const PsychologistApp = () => {
     setShowNotificationDropdown((prev) => !prev);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     if (!showNotificationDropdown) return;
     function handleClick(e) {
@@ -529,10 +652,8 @@ const PsychologistApp = () => {
     switch (currentPage) {
       case 'dashboard': return <Dashboard />;
       case 'schedule': return <Schedule />;
-      case 'patients': return <Patients />;
-      case 'reports': return <Reports />;
+      case 'appointment-detail': return <AppointmentDetail />;
       case 'profile': return <Profile />;
-      case 'settings': return <SettingsPage />;
       default: return <Dashboard />;
     }
   };
@@ -544,10 +665,10 @@ const PsychologistApp = () => {
         <div className="flex items-center space-x-3">
           <div className="bg-white p-1 rounded">
             <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-              <span className="text-white text-xs font-bold">H</span>
+              <span className="text-white text-xs font-bold">M</span>
             </div>
           </div>
-          <span className="font-semibold">Hospital Portal</span>
+          <span className="font-semibold">Mindmaris Counsellors India</span>
         </div>
         <div className="flex items-center space-x-3 relative">
           <button
@@ -560,15 +681,55 @@ const PsychologistApp = () => {
           {showNotificationDropdown && (
             <div
               id="notification-dropdown"
-              className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-lg border z-50"
+              className="absolute left-1/2 -translate-x-1/2 mt-2 w-72 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 transform transition-all duration-200 ease-out animate-in slide-in-from-top-2"
             >
-              <div className="p-4 text-gray-900">
-                <div className="font-semibold mb-2">Notifications</div>
-                <ul className="space-y-2">
-                  <li className="text-sm">🕒 Your 9:00 AM appointment is coming up soon.</li>
-                  <li className="text-sm">✅ James Wilson's session marked as complete.</li>
-                  <li className="text-sm">📄 New report uploaded for Sarah Johnson.</li>
-                </ul>
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
+                  </div>
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">3 new</span>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400 hover:bg-blue-100 transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                      <Clock className="h-4 w-4 text-orange-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">Appointment Reminder</p>
+                      <p className="text-xs text-gray-600 mt-1">Your 9:00 AM appointment is coming up soon.</p>
+                      <p className="text-xs text-blue-600 mt-1">2 minutes ago</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-400 hover:bg-green-100 transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">Session Completed</p>
+                      <p className="text-xs text-gray-600 mt-1">James Wilson's session marked as complete.</p>
+                      <p className="text-xs text-green-600 mt-1">5 minutes ago</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg border-l-4 border-purple-400 hover:bg-purple-100 transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                      <FileText className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">Report Uploaded</p>
+                      <p className="text-xs text-gray-600 mt-1">New report uploaded for Sarah Johnson.</p>
+                      <p className="text-xs text-purple-600 mt-1">10 minutes ago</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                  <button className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                    View All Notifications
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -586,8 +747,6 @@ const PsychologistApp = () => {
           {[
             { id: 'dashboard', icon: Home, label: 'Home' },
             { id: 'schedule', icon: Calendar, label: 'Schedule' },
-            { id: 'patients', icon: Users, label: 'Patients' },
-            { id: 'reports', icon: FileText, label: 'Reports' },
             { id: 'profile', icon: User, label: 'Profile' }
           ].map(({ id, icon: Icon, label }) => (
             <button
@@ -604,137 +763,133 @@ const PsychologistApp = () => {
         </div>
       </div>
 
-      {/* Modals */}
-      {showAddModal && modalType === 'appointment' && (
-        <Modal title="Add New Appointment" onClose={closeModal}>
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Patient Name"
-              value={formData.patientName}
-              onChange={(e) => handleFormChange('patientName', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="time"
-              value={formData.time}
-              onChange={(e) => handleFormChange('time', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <select
-              value={formData.type}
-              onChange={(e) => handleFormChange('type', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Select Type</option>
-              <option value="Initial Consultation">Initial Consultation</option>
-              <option value="Follow-up">Follow-up</option>
-              <option value="Therapy Session">Therapy Session</option>
-              <option value="Assessment">Assessment</option>
-            </select>
-            <div className="flex space-x-3 pt-4">
-              <button
-                onClick={closeModal}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+      {/* Report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
+          <div className="bg-white rounded-lg w-full max-w-sm mx-4 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white">
+              <h2 className="text-lg font-semibold">Submit Report</h2>
+              <button 
+                onClick={() => {
+                  setShowReportModal(false);
+                  setSelectedAppointment(null);
+                }} 
+                className="text-gray-400 hover:text-gray-600"
               >
-                Cancel
-              </button>
-              <button
-                onClick={addAppointment}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add Appointment
+                <X className="h-5 w-5" />
               </button>
             </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Patient Name</label>
+                <input
+                  type="text"
+                  value={formData.selectedPatient}
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
+                  readOnly
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                  <Upload className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">Click to upload or drag and drop</p>
+                  <p className="text-xs text-gray-500">PDF, JPG, PNG up to 10MB</p>
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        showAlert(`File "${file.name}" selected for upload`);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                <textarea
+                  placeholder="Enter your remarks and observations..."
+                  rows={3}
+                  value={formData.reportNotes}
+                  onChange={(e) => setFormData(prev => ({ ...prev, reportNotes: e.target.value }))}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                />
+              </div>
+              
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => {
+                    setShowReportModal(false);
+                    setSelectedAppointment(null);
+                  }}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    submitReport();
+                    setShowReportModal(false);
+                    setSelectedAppointment(null);
+                  }}
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  Submit Report
+                </button>
+              </div>
+            </div>
           </div>
-        </Modal>
+        </div>
       )}
 
-      {showAddModal && modalType === 'patient' && (
-        <Modal title="Add New Patient" onClose={closeModal}>
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Patient Name"
-              value={formData.name}
-              onChange={(e) => handleFormChange('name', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="number"
-              placeholder="Age"
-              value={formData.age}
-              onChange={(e) => handleFormChange('age', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="text"
-              placeholder="Condition"
-              value={formData.condition}
-              onChange={(e) => handleFormChange('condition', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <div className="flex space-x-3 pt-4">
-              <button
-                onClick={closeModal}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={addPatient}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add Patient
-              </button>
+      {/* Alert Modal */}
+      {showAlertModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm mx-4 p-6 text-center">
+            <div className="mb-4">
+              <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
             </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Success!</h3>
+            <p className="text-gray-600 mb-6">{alertMessage}</p>
+            <button
+              onClick={() => setShowAlertModal(false)}
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              OK
+            </button>
           </div>
-        </Modal>
+        </div>
       )}
 
-      {showAddModal && modalType === 'report' && (
-        <Modal title="Add New Report" onClose={closeModal}>
-          <div className="space-y-4">
-            <select
-              value={formData.selectedPatient}
-              onChange={(e) => handleFormChange('selectedPatient', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Select Patient</option>
-              {patients.map(patient => (
-                <option key={patient.id} value={patient.name}>{patient.name}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="Report Title"
-              value={formData.reportTitle}
-              onChange={(e) => handleFormChange('reportTitle', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <textarea
-              placeholder="Report Notes"
-              rows={4}
-              value={formData.reportNotes}
-              onChange={(e) => handleFormChange('reportNotes', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <div className="flex space-x-3 pt-4">
-              <button
-                onClick={closeModal}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={addReport}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add Report
-              </button>
+      {/* Logout Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm mx-auto p-6">
+            <div className="text-center space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Confirm Logout</h3>
+              <p className="text-gray-600">Are you sure you want to logout?</p>
+              <div className="flex space-x-3 pt-2">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmLogout}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
-        </Modal>
+        </div>
       )}
     </div>
   );
