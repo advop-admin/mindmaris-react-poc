@@ -645,62 +645,59 @@ const ManagementApp = () => {
           {showNotificationDropdown && (
             <div
               id="notification-dropdown"
-              className="absolute left-1/2 -translate-x-1/2 mt-2 w-72 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 transform transition-all duration-200 ease-out animate-in slide-in-from-top-2"
+              className="absolute left-1/2 -translate-x-1/2 mt-2 w-80 max-w-xs sm:right-0 sm:left-auto sm:translate-x-0 bg-white rounded-lg shadow-lg border border-gray-200 z-50 transform transition-all duration-200 ease-out"
             >
               <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
-                  </div>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-gray-900 text-sm">Notifications</h3>
                   <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">4 new</span>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400 hover:bg-blue-100 transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Users className="h-4 w-4 text-blue-600" />
+                <div className="space-y-2">
+                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Users className="h-4 w-4 text-gray-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900">New Patient Registration</p>
                       <p className="text-xs text-gray-600 mt-1">New appointment request from Sarah Johnson.</p>
-                      <p className="text-xs text-blue-600 mt-1">1 minute ago</p>
+                      <p className="text-xs text-gray-500 mt-1">1 minute ago</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-400 hover:bg-green-100 transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-gray-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900">Report Completed</p>
                       <p className="text-xs text-gray-600 mt-1">Dr. Smith completed assessment report.</p>
-                      <p className="text-xs text-green-600 mt-1">3 minutes ago</p>
+                      <p className="text-xs text-gray-500 mt-1">3 minutes ago</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg border-l-4 border-purple-400 hover:bg-purple-100 transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      <User className="h-4 w-4 text-purple-600" />
+                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-gray-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900">New Patient Added</p>
                       <p className="text-xs text-gray-600 mt-1">New patient registration: James Wilson.</p>
-                      <p className="text-xs text-purple-600 mt-1">8 minutes ago</p>
+                      <p className="text-xs text-gray-500 mt-1">8 minutes ago</p>
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-3 p-3 bg-orange-50 rounded-lg border-l-4 border-orange-400 hover:bg-orange-100 transition-colors cursor-pointer">
-                    <div className="flex-shrink-0 w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                      <Calendar className="h-4 w-4 text-orange-600" />
+                  <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Calendar className="h-4 w-4 text-gray-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900">Schedule Update</p>
                       <p className="text-xs text-gray-600 mt-1">Dr. Wilson requested schedule change.</p>
-                      <p className="text-xs text-orange-600 mt-1">15 minutes ago</p>
+                      <p className="text-xs text-gray-500 mt-1">15 minutes ago</p>
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 pt-3 border-t border-gray-100">
+                <div className="mt-3 pt-3 border-t border-gray-100">
                   <button className="w-full text-center text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors">
                     View All Notifications
                   </button>
