@@ -106,7 +106,10 @@ const ManagementApp = () => {
       patientCondition: '',
       selectedDoctor: '',
       appointmentTime: '',
-      appointmentType: ''
+      appointmentType: '',
+      doctorName: '',
+      doctorSpecialization: '',
+      doctorAvailability: ''
     });
   };
 
@@ -142,15 +145,51 @@ const ManagementApp = () => {
 
   const addAppointment = () => {
     if (formData.patientName && formData.selectedDoctor && formData.appointmentTime) {
-      const newAppointment = {
-        id: appointments.length + 1,
-        patientName: formData.patientName,
-        doctor: formData.selectedDoctor,
-        time: formData.appointmentTime,
-        status: 'pending',
-        type: formData.appointmentType || 'Consultation'
-      };
-      setAppointments(prev => [...prev, newAppointment]);
+      if (editingItem) {
+        // Update existing appointment
+        setAppointments(prev => prev.map(appointment => 
+          appointment.id === editingItem.id 
+            ? { ...appointment, patientName: formData.patientName, doctor: formData.selectedDoctor, time: formData.appointmentTime, type: formData.appointmentType || 'Consultation' }
+            : appointment
+        ));
+        setEditingItem(null);
+      } else {
+        // Add new appointment
+        const newAppointment = {
+          id: appointments.length + 1,
+          patientName: formData.patientName,
+          doctor: formData.selectedDoctor,
+          time: formData.appointmentTime,
+          status: 'pending',
+          type: formData.appointmentType || 'Consultation'
+        };
+        setAppointments(prev => [...prev, newAppointment]);
+      }
+      closeModal();
+    }
+  };
+
+  const addDoctor = () => {
+    if (formData.doctorName && formData.doctorSpecialization && formData.doctorAvailability) {
+      if (editingItem) {
+        // Update existing doctor
+        setDoctors(prev => prev.map(doctor => 
+          doctor.id === editingItem.id 
+            ? { ...doctor, name: formData.doctorName, specialization: formData.doctorSpecialization, availability: formData.doctorAvailability }
+            : doctor
+        ));
+        setEditingItem(null);
+      } else {
+        // Add new doctor
+        const newDoctor = {
+          id: doctors.length + 1,
+          name: formData.doctorName,
+          specialization: formData.doctorSpecialization,
+          availability: formData.doctorAvailability,
+          patients: 0
+        };
+        setDoctors(prev => [...prev, newDoctor]);
+      }
       closeModal();
     }
   };
@@ -168,6 +207,40 @@ const ManagementApp = () => {
       appointmentType: ''
     });
     setModalType('patient');
+    setShowAddModal(true);
+  };
+
+  const editDoctor = (doctor) => {
+    setEditingItem(doctor);
+    setFormData({
+      doctorName: doctor.name,
+      doctorSpecialization: doctor.specialization,
+      doctorAvailability: doctor.availability,
+      patientName: '',
+      patientAge: '',
+      patientPhone: '',
+      patientEmail: '',
+      patientCondition: '',
+      selectedDoctor: '',
+      appointmentTime: '',
+      appointmentType: ''
+    });
+    setModalType('doctor');
+    setShowAddModal(true);
+  };
+
+  const editAppointment = (appointment) => {
+    setEditingItem(appointment);
+    setFormData({
+      patientName: appointment.patientName,
+      selectedDoctor: appointment.doctor,
+      appointmentTime: appointment.time,
+      appointmentType: appointment.type,
+      doctorName: '',
+      doctorSpecialization: '',
+      doctorAvailability: ''
+    });
+    setModalType('appointment');
     setShowAddModal(true);
   };
 
@@ -244,33 +317,10 @@ const ManagementApp = () => {
       <div className="bg-white rounded-lg shadow-sm border">
         <div className="p-4 border-b">
           <h2 className="text-lg font-semibold text-gray-900">Weekly Earnings</h2>
-          <p className="text-sm text-gray-600">Jan 5 - Jan 11, 2025</p>
         </div>
-        <div className="p-4 space-y-4">
-          <div className="text-center">
-            <p className="text-3xl font-bold text-green-600">₹{earnings.weekly.total.toLocaleString()}</p>
-            <p className="text-sm text-gray-600">Total Earnings</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center">
-              <p className="text-lg font-semibold text-purple-600">₹{earnings.weekly.prime.toLocaleString()}</p>
-              <p className="text-xs text-gray-600">Prime Earnings</p>
-            </div>
-            <div className="text-center">
-              <p className="text-lg font-semibold text-yellow-600">₹{earnings.weekly.instant.toLocaleString()}</p>
-              <p className="text-xs text-gray-600">Instant Earnings</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <p className="text-sm font-medium">{earnings.weekly.connections}</p>
-              <p className="text-xs text-gray-600">Total Connections</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium">{earnings.weekly.completed}</p>
-              <p className="text-xs text-gray-600">Completed</p>
-            </div>
-          </div>
+        <div className="p-4 text-center">
+          <p className="text-3xl font-bold text-green-600">₹{earnings.weekly.total.toLocaleString()}</p>
+          <p className="text-sm text-gray-600">Total Earnings</p>
         </div>
       </div>
 
@@ -401,6 +451,12 @@ const ManagementApp = () => {
                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
                   {appointment.status}
                 </span>
+                <button 
+                  onClick={() => editAppointment(appointment)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <Settings className="h-4 w-4" />
+                </button>
               </div>
             </div>
           </div>
@@ -411,7 +467,15 @@ const ManagementApp = () => {
 
   const Doctors = () => (
     <div className="p-4 space-y-4">
-      <h1 className="text-xl font-bold text-gray-900">Doctor Management</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold text-gray-900">Doctor Management</h1>
+        <button 
+          onClick={() => openModal('doctor')}
+          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          <Plus className="h-5 w-5" />
+        </button>
+      </div>
 
       <div className="space-y-3">
         {doctors.map(doctor => (
@@ -426,8 +490,11 @@ const ManagementApp = () => {
                 <p className="text-sm text-gray-600">Availability: {doctor.availability}</p>
                 <p className="text-sm text-blue-600 mt-1">Active Patients: {doctor.patients}</p>
               </div>
-              <button className="text-gray-400 hover:text-gray-600 transition-colors">
-                <Eye className="h-5 w-5" />
+              <button 
+                onClick={() => editDoctor(doctor)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <Settings className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -782,7 +849,49 @@ const ManagementApp = () => {
                 onClick={addAppointment}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Schedule
+                {editingItem ? "Update Appointment" : "Schedule"}
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {showAddModal && modalType === 'doctor' && (
+        <Modal title={editingItem ? "Edit Doctor" : "Add New Doctor"} onClose={closeModal}>
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Doctor Name"
+              value={formData.doctorName}
+              onChange={(e) => handleFormChange('doctorName', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <input
+              type="text"
+              placeholder="Specialization"
+              value={formData.doctorSpecialization}
+              onChange={(e) => handleFormChange('doctorSpecialization', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <input
+              type="text"
+              placeholder="Availability (e.g., Mon-Fri 9AM-5PM)"
+              value={formData.doctorAvailability}
+              onChange={(e) => handleFormChange('doctorAvailability', e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <div className="flex space-x-3 pt-4">
+              <button
+                onClick={closeModal}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={addDoctor}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {editingItem ? "Update Doctor" : "Add Doctor"}
               </button>
             </div>
           </div>
