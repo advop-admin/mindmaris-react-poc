@@ -31,13 +31,13 @@ const ManagementApp = () => {
     { id: 4, name: 'Dr. David Lee', specialization: 'Addiction Therapy', availability: 'Mon-Fri 2PM-8PM', patients: 6 }
   ]);
 
-  const [reports, setReports] = useState([
+  const [reports] = useState([
     { id: 1, title: 'Assessment Report #1', patient: 'Sarah Johnson', doctor: 'Dr. Smith', date: 'Jan 7, 2025', status: 'completed' },
     { id: 2, title: 'Assessment Report #2', patient: 'Michael Chen', doctor: 'Dr. Wilson', date: 'Jan 6, 2025', status: 'completed' },
     { id: 3, title: 'Assessment Report #3', patient: 'Emily Davis', doctor: 'Dr. Brown', date: 'Jan 5, 2025', status: 'pending' }
   ]);
 
-  const [earnings, setEarnings] = useState({
+  const [earnings] = useState({
     weekly: {
       total: 12500,
       prime: 8000,
@@ -68,7 +68,7 @@ const ManagementApp = () => {
     selectedDoctorForReport: ''
   });
 
-  const [profile, setProfile] = useState({
+  const [profile] = useState({
     name: 'Centre Admin',
     title: 'Centre Management',
     email: 'admin@mindmaris.com',
