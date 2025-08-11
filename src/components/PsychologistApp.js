@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft } from 'lucide-react';
+import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Search, Plus } from 'lucide-react';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -11,6 +11,39 @@ const PsychologistApp = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showProceduresModal, setShowProceduresModal] = useState(false);
+  const [procedureSearchTerm, setProcedureSearchTerm] = useState('');
+
+  const categories = [
+    "No Category",
+    "ANJU HARI",
+    "Keziah",
+    "Sanigha"
+  ];
+
+  const procedures = [
+    {
+      section: "PLANNED TREATMENTS",
+      items: [
+        { name: "CLINICAL ASSESMENT", date: "2025-08-04" }
+      ]
+    },
+    {
+      section: "ALL TREATMENTS",
+      items: [
+        { name: "Consultation" },
+        { name: "CLINICAL ASSESMENT" },
+        { name: "Consultation" },
+        { name: "DIAGNOSIS" },
+        { name: "DUE" },
+        { name: "E&P Mastry Class" },
+        { name: "FAMILY CONSTELLATION" },
+        { name: "Follow-up visit" },
+        { name: "GENTLE EMPOWERMENT CIRCLE" }
+      ]
+    }
+  ];
   
   // Load appointments from localStorage or use default data
   const getInitialAppointments = () => {
@@ -165,8 +198,16 @@ const PsychologistApp = () => {
     reportTitle: '',
     reportNotes: '',
     selectedPatient: '',
-    appointmentNotes: ''
+    appointmentNotes: '',
+    category: '',
+    procedures: '',
+    notifySMS: false,
+    notifyEmail: false
   });
+
+  const handleFormChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const [profile] = useState({
     name: 'Dr. Sarah Smith',
@@ -851,6 +892,103 @@ const PsychologistApp = () => {
                   Logout
               </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Category Selection Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-medium text-gray-900">Select Category</h2>
+              <button onClick={() => setShowCategoryModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="max-h-[60vh] overflow-y-auto">
+              {categories.map((category, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    handleFormChange('category', category);
+                    setShowCategoryModal(false);
+                  }}
+                  className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b text-gray-700 transition-colors"
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Procedures Selection Modal */}
+      {showProceduresModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-medium text-gray-900">Select Procedures</h2>
+              <button onClick={() => setShowProceduresModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-4 border-b">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  placeholder="Search procedures..."
+                  value={procedureSearchTerm}
+                  onChange={(e) => setProcedureSearchTerm(e.target.value)}
+                  className="w-full pl-9 pr-9 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
+                {procedureSearchTerm && (
+                  <button
+                    onClick={() => setProcedureSearchTerm('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="max-h-[50vh] overflow-y-auto">
+              {procedures.map((section, index) => (
+                <div key={index}>
+                  <div className="px-4 py-2 bg-gray-50 text-sm font-medium text-gray-700">
+                    {section.section}
+                  </div>
+                  <div>
+                    {section.items.map((item, itemIndex) => (
+                      <div
+                        key={itemIndex}
+                        className="flex items-center justify-between px-4 py-3 border-b hover:bg-gray-50 transition-colors"
+                      >
+                        <div>
+                          <span className="text-sm text-gray-700">{item.name}</span>
+                          {item.date && (
+                            <span className="text-xs text-teal-600 ml-2">{item.date}</span>
+                          )}
+                        </div>
+                        <button className="text-teal-600 hover:text-teal-700 p-1">
+                          <Plus className="h-5 w-5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 border-t">
+              <button 
+                className="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-colors font-medium"
+                onClick={() => setShowProceduresModal(false)}
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>

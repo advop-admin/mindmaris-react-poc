@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Users, FileText, User, Search, Plus, Download, BarChart3, Settings, X, LogOut } from 'lucide-react';
+import PatientDetails from './PatientDetails';
+import AppointmentDetails from './AppointmentDetails';
 
 const ManagementApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -8,6 +10,41 @@ const ManagementApp = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editingItem, setEditingItem] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showProceduresModal, setShowProceduresModal] = useState(false);
+  const [procedureSearchTerm, setProcedureSearchTerm] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+
+  const categories = [
+    "No Category",
+    "ANJU HARI",
+    "Keziah",
+    "Sanigha"
+  ];
+
+  const procedures = [
+    {
+      section: "PLANNED TREATMENTS",
+      items: [
+        { name: "CLINICAL ASSESMENT", date: "2025-08-04" }
+      ]
+    },
+    {
+      section: "ALL TREATMENTS",
+      items: [
+        { name: "Consultation" },
+        { name: "CLINICAL ASSESMENT" },
+        { name: "Consultation" },
+        { name: "DIAGNOSIS" },
+        { name: "DUE" },
+        { name: "E&P Mastry Class" },
+        { name: "FAMILY CONSTELLATION" },
+        { name: "Follow-up visit" },
+        { name: "GENTLE EMPOWERMENT CIRCLE" }
+      ]
+    }
+  ];
 
 
   
@@ -62,7 +99,12 @@ const ManagementApp = () => {
     patientEmail: '',
     selectedDoctor: '',
     appointmentTime: '',
-    appointmentType: '',
+    appointmentDate: '',
+    category: '',
+    procedures: '',
+    notes: '',
+    notifySMS: false,
+    notifyEmail: false,
     reportTitle: '',
     reportNotes: '',
     selectedPatient: '',
@@ -145,12 +187,24 @@ const ManagementApp = () => {
   };
 
   const addAppointment = () => {
-    if (formData.patientName && formData.selectedDoctor && formData.appointmentTime) {
+    if (formData.patientName && formData.selectedDoctor && formData.appointmentTime && formData.appointmentDate) {
       if (editingItem) {
         // Update existing appointment
         setAppointments(prev => prev.map(appointment => 
           appointment.id === editingItem.id 
-            ? { ...appointment, patientName: formData.patientName, doctor: formData.selectedDoctor, time: formData.appointmentTime, type: formData.appointmentType || 'Consultation' }
+            ? { 
+                ...appointment, 
+                patientName: formData.patientName,
+                phone: formData.patientPhone,
+                doctor: formData.selectedDoctor,
+                date: formData.appointmentDate,
+                time: formData.appointmentTime,
+                category: formData.category,
+                procedures: formData.procedures,
+                notes: formData.notes,
+                notifySMS: formData.notifySMS,
+                notifyEmail: formData.notifyEmail
+              }
             : appointment
         ));
         setEditingItem(null);
@@ -159,10 +213,16 @@ const ManagementApp = () => {
         const newAppointment = {
           id: appointments.length + 1,
           patientName: formData.patientName,
+          phone: formData.patientPhone,
           doctor: formData.selectedDoctor,
+          date: formData.appointmentDate,
           time: formData.appointmentTime,
           status: 'pending',
-          type: formData.appointmentType || 'Consultation'
+          category: formData.category,
+          procedures: formData.procedures,
+          notes: formData.notes,
+          notifySMS: formData.notifySMS,
+          notifyEmail: formData.notifyEmail
         };
         setAppointments(prev => [...prev, newAppointment]);
       }
@@ -397,90 +457,130 @@ const ManagementApp = () => {
 
   const Patients = () => (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Patient Management</h1>
-        <button 
-          onClick={() => openModal('patient')}
-          className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
-
-      <div className="relative">
-        <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search patients..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+      {selectedPatient ? (
+        <PatientDetails 
+          onBack={() => setSelectedPatient(null)}
+          onAddAppointment={() => {
+            setModalType('appointment');
+            setShowAddModal(true);
+            setFormData(prev => ({
+              ...prev,
+              patientName: selectedPatient.name,
+              patientPhone: selectedPatient.phone
+            }));
+          }}
         />
-      </div>
-
-      <div className="space-y-3">
-        {filteredPatients.map(patient => (
-          <div key={patient.id} className="bg-white rounded-lg shadow-sm border p-4">
-            <div className="flex items-start space-x-3">
-              <div className="bg-teal-100 p-2 rounded-full">
-                <User className="h-5 w-5 text-teal-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{patient.name}</h3>
-                <p className="text-sm text-gray-600">Age: {patient.age} • Phone: {patient.phone}</p>
-                <p className="text-sm text-gray-600">Email: {patient.email}</p>
-                <p className="text-sm text-teal-600 mt-1">Condition: {patient.condition}</p>
-              </div>
-              <button 
-                onClick={() => editPatient(patient)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <Settings className="h-5 w-5" />
-              </button>
-            </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-gray-900">Patient Management</h1>
+            <button 
+              onClick={() => openModal('patient')}
+              className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
+            >
+              <Plus className="h-5 w-5" />
+            </button>
           </div>
-        ))}
-      </div>
+
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search patients..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            />
+          </div>
+
+          <div className="space-y-3">
+            {filteredPatients.map(patient => (
+              <div 
+                key={patient.id} 
+                className="bg-white rounded-lg shadow-sm border p-4 cursor-pointer hover:bg-gray-50"
+                onClick={() => setSelectedPatient(patient)}
+              >
+                <div className="flex items-start space-x-3">
+                  <div className="bg-teal-100 p-2 rounded-full">
+                    <User className="h-5 w-5 text-teal-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">{patient.name}</h3>
+                    <p className="text-sm text-gray-600">Age: {patient.age} • Phone: {patient.phone}</p>
+                    <p className="text-sm text-gray-600">Email: {patient.email}</p>
+                    <p className="text-sm text-teal-600 mt-1">Condition: {patient.condition}</p>
+                  </div>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      editPatient(patient);
+                    }}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 
   const Appointments = () => (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Appointment Management</h1>
-        <button 
-          onClick={() => openModal('appointment')}
-          className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        {appointments.map(appointment => (
-          <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
-                <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                <p className="text-sm text-teal-600 mt-1">Doctor: {appointment.doctor}</p>
-                <p className="text-sm text-gray-600 mt-1">Type: {appointment.type}</p>
-              </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                  {appointment.status}
-                </span>
-                <button 
-                  onClick={() => editAppointment(appointment)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <Settings className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
+      {selectedAppointment ? (
+        <AppointmentDetails
+          onBack={() => setSelectedAppointment(null)}
+          appointment={selectedAppointment}
+        />
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-gray-900">Appointment Management</h1>
+            <button 
+              onClick={() => openModal('appointment')}
+              className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
+            >
+              <Plus className="h-5 w-5" />
+            </button>
           </div>
-        ))}
-      </div>
+
+          <div className="space-y-3">
+            {appointments.map(appointment => (
+              <div 
+                key={appointment.id} 
+                className="bg-white rounded-lg shadow-sm border p-4 cursor-pointer hover:bg-gray-50"
+                onClick={() => setSelectedAppointment(appointment)}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
+                    <p className="text-sm text-teal-600 mt-1">Doctor: {appointment.doctor}</p>
+                    <p className="text-sm text-gray-600 mt-1">Type: {appointment.type}</p>
+                  </div>
+                  <div className="flex flex-col items-end space-y-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                      {appointment.status}
+                    </span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        editAppointment(appointment);
+                      }}
+                      className="text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 
@@ -730,57 +830,124 @@ const ManagementApp = () => {
       )}
 
       {showAddModal && modalType === 'appointment' && (
-        <Modal title="Schedule Appointment" onClose={closeModal}>
-          <div className="space-y-4">
-            <select
-              value={formData.patientName}
-              onChange={(e) => handleFormChange('patientName', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            >
-              <option value="">Select Patient</option>
-              {patients.map(patient => (
-                <option key={patient.id} value={patient.name}>{patient.name}</option>
-              ))}
-            </select>
-            <select
-              value={formData.selectedDoctor}
-              onChange={(e) => handleFormChange('selectedDoctor', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            >
-              <option value="">Select Doctor</option>
-              {doctors.map(doctor => (
-                <option key={doctor.id} value={doctor.name}>{doctor.name}</option>
-              ))}
-            </select>
-            <input
-              type="time"
-              value={formData.appointmentTime}
-              onChange={(e) => handleFormChange('appointmentTime', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            />
-            <select
-              value={formData.appointmentType}
-              onChange={(e) => handleFormChange('appointmentType', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-            >
-              <option value="">Select Type</option>
-              <option value="Initial Consultation">Initial Consultation</option>
-              <option value="Follow-up">Follow-up</option>
-              <option value="Therapy Session">Therapy Session</option>
-              <option value="Assessment">Assessment</option>
-            </select>
-            <div className="flex space-x-3 pt-4">
-              <button
-                onClick={closeModal}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+        <Modal title="ADD APPOINTMENT" onClose={closeModal}>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-gray-600 mb-2">Patient Name</label>
+              <input
+                type="text"
+                placeholder="Enter patient name"
+                value={formData.patientName}
+                onChange={(e) => handleFormChange('patientName', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Mobile Number</label>
+              <input
+                type="tel"
+                placeholder="Enter mobile number"
+                value={formData.patientPhone}
+                onChange={(e) => handleFormChange('patientPhone', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Doctor Name</label>
+              <select
+                value={formData.selectedDoctor}
+                onChange={(e) => handleFormChange('selectedDoctor', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
-                Cancel
+                <option value="">Select Doctor</option>
+                {doctors.map(doctor => (
+                  <option key={doctor.id} value={doctor.name}>{doctor.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Date</label>
+              <input
+                type="date"
+                value={formData.appointmentDate}
+                onChange={(e) => handleFormChange('appointmentDate', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Time</label>
+              <input
+                type="time"
+                value={formData.appointmentTime}
+                onChange={(e) => handleFormChange('appointmentTime', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Category</label>
+              <button
+                onClick={() => setShowCategoryModal(true)}
+                className="w-full p-3 border border-gray-300 rounded-lg text-left hover:bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              >
+                {formData.category || "Select Category"}
               </button>
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Procedures</label>
+              <button
+                onClick={() => setShowProceduresModal(true)}
+                className="w-full p-3 border border-gray-300 rounded-lg text-left hover:bg-gray-50 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              >
+                {formData.procedures || "Select Procedures"}
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Notes</label>
+              <textarea
+                placeholder="Enter notes"
+                value={formData.notes}
+                onChange={(e) => handleFormChange('notes', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none h-24"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-600 mb-2">Notify Patient</label>
+              <div className="flex space-x-4">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.notifySMS}
+                    onChange={(e) => handleFormChange('notifySMS', e.target.checked)}
+                    className="form-checkbox h-4 w-4 text-teal-600"
+                  />
+                  <span>SMS</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.notifyEmail}
+                    onChange={(e) => handleFormChange('notifyEmail', e.target.checked)}
+                    className="form-checkbox h-4 w-4 text-teal-600"
+                  />
+                  <span>Email</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4">
               <button
                 onClick={addAppointment}
-                className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
               >
-                {editingItem ? "Update Appointment" : "Schedule"}
+                SAVE
               </button>
             </div>
           </div>
@@ -847,6 +1014,103 @@ const ManagementApp = () => {
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Category Selection Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-medium text-gray-900">Select Category</h2>
+              <button onClick={() => setShowCategoryModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="max-h-[60vh] overflow-y-auto">
+              {categories.map((category, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    handleFormChange('category', category);
+                    setShowCategoryModal(false);
+                  }}
+                  className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b text-gray-700 transition-colors"
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Procedures Selection Modal */}
+      {showProceduresModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-medium text-gray-900">Select Procedures</h2>
+              <button onClick={() => setShowProceduresModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-4 border-b">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  placeholder="Search procedures..."
+                  value={procedureSearchTerm}
+                  onChange={(e) => setProcedureSearchTerm(e.target.value)}
+                  className="w-full pl-9 pr-9 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
+                {procedureSearchTerm && (
+                  <button
+                    onClick={() => setProcedureSearchTerm('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="max-h-[50vh] overflow-y-auto">
+              {procedures.map((section, index) => (
+                <div key={index}>
+                  <div className="px-4 py-2 bg-gray-50 text-sm font-medium text-gray-700">
+                    {section.section}
+                  </div>
+                  <div>
+                    {section.items.map((item, itemIndex) => (
+                      <div
+                        key={itemIndex}
+                        className="flex items-center justify-between px-4 py-3 border-b hover:bg-gray-50 transition-colors"
+                      >
+                        <div>
+                          <span className="text-sm text-gray-700">{item.name}</span>
+                          {item.date && (
+                            <span className="text-xs text-teal-600 ml-2">{item.date}</span>
+                          )}
+                        </div>
+                        <button className="text-teal-600 hover:text-teal-700 p-1">
+                          <Plus className="h-5 w-5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 border-t">
+              <button 
+                className="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-colors font-medium"
+                onClick={() => setShowProceduresModal(false)}
+              >
+                Save
               </button>
             </div>
           </div>
