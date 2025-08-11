@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Search, Plus } from 'lucide-react';
+import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Stethoscope, LayoutGrid } from 'lucide-react';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -11,39 +11,8 @@ const PsychologistApp = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [showProceduresModal, setShowProceduresModal] = useState(false);
-  const [procedureSearchTerm, setProcedureSearchTerm] = useState('');
 
-  const categories = [
-    "No Category",
-    "ANJU HARI",
-    "Keziah",
-    "Sanigha"
-  ];
 
-  const procedures = [
-    {
-      section: "PLANNED TREATMENTS",
-      items: [
-        { name: "CLINICAL ASSESMENT", date: "2025-08-04" }
-      ]
-    },
-    {
-      section: "ALL TREATMENTS",
-      items: [
-        { name: "Consultation" },
-        { name: "CLINICAL ASSESMENT" },
-        { name: "Consultation" },
-        { name: "DIAGNOSIS" },
-        { name: "DUE" },
-        { name: "E&P Mastry Class" },
-        { name: "FAMILY CONSTELLATION" },
-        { name: "Follow-up visit" },
-        { name: "GENTLE EMPOWERMENT CIRCLE" }
-      ]
-    }
-  ];
   
   // Load appointments from localStorage or use default data
   const getInitialAppointments = () => {
@@ -198,16 +167,8 @@ const PsychologistApp = () => {
     reportTitle: '',
     reportNotes: '',
     selectedPatient: '',
-    appointmentNotes: '',
-    category: '',
-    procedures: '',
-    notifySMS: false,
-    notifyEmail: false
+    appointmentNotes: ''
   });
-
-  const handleFormChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
 
   const [profile] = useState({
     name: 'Dr. Sarah Smith',
@@ -490,116 +451,137 @@ const PsychologistApp = () => {
   );
   };
 
+
+
   const AppointmentDetail = () => (
-    <div className="p-4 space-y-4">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-        <button 
-              onClick={() => setCurrentPage('schedule')}
-              className="text-gray-600 hover:text-gray-800 transition-colors"
-        >
-              <ArrowLeft className="h-5 w-5" />
-        </button>
-            <h1 className="text-xl font-bold text-gray-900">Appointment Details</h1>
-      </div>
+      <div className="p-4 border-b">
+        <div className="flex items-center">
+          <button 
+            onClick={() => setCurrentPage('schedule')}
+            className="text-gray-600 hover:text-gray-800 mr-3"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <h1 className="text-lg font-medium text-gray-900">Appointment Details</h1>
+        </div>
       </div>
 
       {selectedAppointment && (
-        <>
-          {/* Appointment Info */}
-          <div className="bg-white rounded-lg shadow-sm border p-4">
-            <h2 className="font-semibold text-gray-900 mb-4">Appointment Information</h2>
-      <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Patient:</span>
-                <span className="font-medium">{selectedAppointment.patientName}</span>
+        <div className="bg-white mx-4 mt-4 rounded-t-xl">
+          {/* Patient Info */}
+          <div className="p-4 flex items-center justify-between border-b">
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                <Stethoscope className="h-5 w-5 text-teal-600" />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Time:</span>
-                <span className="font-medium">{selectedAppointment.time}</span>
+              <div>
+                <h2 className="text-gray-900 font-medium">{selectedAppointment.patientName}</h2>
+                <p className="text-sm text-gray-600">
+                  {selectedAppointment.patientDetails.gender}, {selectedAppointment.patientDetails.age} Years
+                </p>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Type:</span>
-                <span className="font-medium">{selectedAppointment.type}</span>
+            </div>
+            <span className="text-teal-600">P{selectedAppointment.id}</span>
+          </div>
+
+          {/* Appointment Details */}
+          <div className="p-4 space-y-6">
+            {/* Doctor */}
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                <Stethoscope className="h-5 w-5 text-teal-600" />
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Status:</span>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(selectedAppointment.status)}`}>
-                  {selectedAppointment.status}
-                </span>
+              <span className="text-gray-900">{selectedAppointment.doctor || "Dr. Sarah Smith"}</span>
+            </div>
+
+            {/* Time */}
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                <Clock className="h-5 w-5 text-teal-600" />
               </div>
-              {selectedAppointment.notes && (
-                <div className="pt-2 border-t">
-                  <span className="text-gray-600">Notes:</span>
-                  <p className="text-sm mt-1">{selectedAppointment.notes}</p>
+              <div>
+                <span className="text-gray-900">{selectedAppointment.time}</span>
+                <span className="text-teal-600 ml-4">{selectedAppointment.date}</span>
+              </div>
+            </div>
+
+            {/* Category */}
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                <LayoutGrid className="h-5 w-5 text-teal-600" />
+              </div>
+              <span className="text-gray-900">{selectedAppointment.category || selectedAppointment.type}</span>
+            </div>
+
+            {/* Procedures */}
+            {selectedAppointment.procedures && (
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-teal-600" />
                 </div>
-              )}
+                <span className="text-gray-900">{selectedAppointment.procedures}</span>
+              </div>
+            )}
+
+            {/* Notes */}
+            {selectedAppointment.notes && (
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-teal-600" />
+                </div>
+                <div className="flex-1">
+                  <span className="text-sm text-gray-600 block mb-1">Notes</span>
+                  <p className="text-gray-900">{selectedAppointment.notes}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Notification Preferences */}
+            {(selectedAppointment.notifySMS || selectedAppointment.notifyEmail) && (
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                  <Bell className="h-5 w-5 text-teal-600" />
+                </div>
+                <div className="flex-1">
+                  <span className="text-sm text-gray-600 block mb-1">Notifications</span>
+                  <div className="space-x-3">
+                    {selectedAppointment.notifySMS && (
+                      <span className="text-gray-900">SMS</span>
+                    )}
+                    {selectedAppointment.notifyEmail && (
+                      <span className="text-gray-900">Email</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Contact Information */}
+            <div className="flex items-start space-x-4">
+              <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-teal-600" />
+              </div>
+              <div className="flex-1">
+                <span className="text-sm text-gray-600 block mb-1">Contact</span>
+                <p className="text-gray-900">{selectedAppointment.patientDetails?.phone}</p>
+                <p className="text-gray-900">{selectedAppointment.patientDetails?.email}</p>
+              </div>
             </div>
           </div>
 
-          {/* Patient Details */}
-          <div className="bg-white rounded-lg shadow-sm border p-4">
-            <h2 className="font-semibold text-gray-900 mb-4">Patient Information</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-medium">{selectedAppointment.patientName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Age:</span>
-                <span className="font-medium">{selectedAppointment.patientDetails.age}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Condition:</span>
-                <span className="font-medium">{selectedAppointment.patientDetails.condition}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Phone:</span>
-                <span className="font-medium">{selectedAppointment.patientDetails.phone}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Email:</span>
-                <span className="font-medium">{selectedAppointment.patientDetails.email}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Last Visit:</span>
-                <span className="font-medium">{selectedAppointment.patientDetails.lastVisit}</span>
-      </div>
-    </div>
-      </div>
-
-          {/* Status Actions */}
-      <div className="bg-white rounded-lg shadow-sm border p-4">
-            <h2 className="font-semibold text-gray-900 mb-4">Actions</h2>
-            <div className="space-y-3">
-              {selectedAppointment.status === 'pending' && (
-        <div className="space-y-3">
+          {/* Check Out Button */}
+          <div className="fixed bottom-[72px] left-0 right-0">
             <button 
-                    onClick={() => markAppointmentComplete(selectedAppointment.id)}
-                    className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
+              onClick={() => markAppointmentComplete(selectedAppointment.id)}
+              className="w-full bg-[#00A099] text-white h-[56px] text-lg font-medium"
+              disabled={selectedAppointment.status === 'completed'}
             >
-                    Mark as Completed
-            </button>
-            <button 
-                    onClick={() => openReportModal(selectedAppointment)}
-                    className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-            >
-                    Submit Report
+              {selectedAppointment.status === 'completed' ? 'Completed' : 'Check Out'}
             </button>
           </div>
-              )}
-              {selectedAppointment.status === 'completed' && (
-          <button 
-                  onClick={() => openReportModal(selectedAppointment)}
-                  className="w-full bg-teal-600 text-white py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-          >
-                  View/Edit Report
-          </button>
-              )}
-            </div>
         </div>
-        </>
       )}
     </div>
   );
@@ -897,102 +879,6 @@ const PsychologistApp = () => {
         </div>
       )}
 
-      {/* Category Selection Modal */}
-      {showCategoryModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-sm">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-medium text-gray-900">Select Category</h2>
-              <button onClick={() => setShowCategoryModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="max-h-[60vh] overflow-y-auto">
-              {categories.map((category, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    handleFormChange('category', category);
-                    setShowCategoryModal(false);
-                  }}
-                  className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b text-gray-700 transition-colors"
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Procedures Selection Modal */}
-      {showProceduresModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-sm">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-medium text-gray-900">Select Procedures</h2>
-              <button onClick={() => setShowProceduresModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="p-4 border-b">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
-                  type="text"
-                  placeholder="Search procedures..."
-                  value={procedureSearchTerm}
-                  onChange={(e) => setProcedureSearchTerm(e.target.value)}
-                  className="w-full pl-9 pr-9 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                />
-                {procedureSearchTerm && (
-                  <button
-                    onClick={() => setProcedureSearchTerm('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-            <div className="max-h-[50vh] overflow-y-auto">
-              {procedures.map((section, index) => (
-                <div key={index}>
-                  <div className="px-4 py-2 bg-gray-50 text-sm font-medium text-gray-700">
-                    {section.section}
-                  </div>
-                  <div>
-                    {section.items.map((item, itemIndex) => (
-                      <div
-                        key={itemIndex}
-                        className="flex items-center justify-between px-4 py-3 border-b hover:bg-gray-50 transition-colors"
-                      >
-                        <div>
-                          <span className="text-sm text-gray-700">{item.name}</span>
-                          {item.date && (
-                            <span className="text-xs text-teal-600 ml-2">{item.date}</span>
-                          )}
-                        </div>
-                        <button className="text-teal-600 hover:text-teal-700 p-1">
-                          <Plus className="h-5 w-5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="p-4 border-t">
-              <button 
-                className="w-full bg-teal-600 text-white py-2 rounded-lg hover:bg-teal-700 transition-colors font-medium"
-                onClick={() => setShowProceduresModal(false)}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
