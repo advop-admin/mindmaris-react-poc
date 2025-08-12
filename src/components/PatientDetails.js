@@ -1,10 +1,8 @@
 import React from 'react';
 import { Calendar, ArrowLeft, Plus } from 'lucide-react';
+import mockData from '../data/mockData.json';
 
 const PatientDetails = ({ onBack, onAddAppointment, isManagement = false, patientId }) => {
-
-  // Import mock data
-  const mockData = require('../data/mockData.json');
   
   // Get patient data based on patientId
   const patient = mockData.patients.find(p => p.id === patientId) || mockData.patients[0];

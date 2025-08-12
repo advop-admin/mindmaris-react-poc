@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Users, FileText, User, Search, Plus, Download, BarChart3, Settings, X, LogOut } from 'lucide-react';
+import mockData from '../data/mockData.json';
 import PatientDetails from './PatientDetails';
 import AppointmentDetails from './AppointmentDetails';
 
@@ -55,8 +56,7 @@ const ManagementApp = () => {
   { id: 4, patientName: 'James Wilson', doctor: 'Dr. Smith', time: '03:30 PM', status: 'pending', type: 'Assessment' }
   ]);
 
-  // Import mock data
-  const mockData = require('../data/mockData.json');
+
   
   const [patients, setPatients] = useState(mockData.patients);
 

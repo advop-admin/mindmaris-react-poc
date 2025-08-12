@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Stethoscope, LayoutGrid, MoreVertical } from 'lucide-react';
+import mockData from '../data/mockData.json';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -11,11 +12,6 @@ const PsychologistApp = () => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-
-
-  
-  // Import mock data
-  const mockData = require('../data/mockData.json');
 
   // Load appointments from localStorage or use mock data
   const getInitialAppointments = () => {
