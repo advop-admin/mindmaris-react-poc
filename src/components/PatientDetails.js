@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Calendar, ArrowLeft, Plus } from 'lucide-react';
 
 const PatientDetails = ({ onBack, onAddAppointment, isManagement = false, patientId }) => {
-  const [showOptions, setShowOptions] = useState(false);
 
   // Import mock data
   const mockData = require('../data/mockData.json');
