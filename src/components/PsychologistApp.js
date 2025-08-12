@@ -369,7 +369,7 @@ const PsychologistApp = () => {
                           </div>
                           <div className="mt-1 space-y-1">
                             <div className="flex items-center space-x-2">
-                              <p className="text-sm text-gray-600">{appointment.patientDetails.gender}, {appointment.patientDetails.age} Years</p>
+                              <p className="text-sm text-gray-600">{appointment.patientDetails?.gender}, {appointment.patientDetails?.age} Years</p>
                               <span className="text-xs text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">{appointment.category}</span>
                             </div>
                             <p className="text-sm text-teal-600">
@@ -510,7 +510,7 @@ const PsychologistApp = () => {
               <div>
                 <h2 className="text-gray-900 font-medium">{selectedAppointment.patientName}</h2>
                 <p className="text-sm text-gray-600">
-                  {selectedAppointment.patientDetails.gender}, {selectedAppointment.patientDetails.age} Years
+                  {selectedAppointment.patientDetails?.gender}, {selectedAppointment.patientDetails?.age} Years
                 </p>
               </div>
             </div>
@@ -552,7 +552,12 @@ const PsychologistApp = () => {
                 <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
                   <FileText className="h-5 w-5 text-teal-600" />
                 </div>
-                <span className="text-gray-900">{selectedAppointment.procedures}</span>
+                <span className="text-gray-900">
+                  {selectedAppointment.procedures && selectedAppointment.procedures.length > 0 
+                    ? selectedAppointment.procedures.map((proc, index) => proc.name).join(', ')
+                    : 'No procedures'
+                  }
+                </span>
               </div>
             )}
 
