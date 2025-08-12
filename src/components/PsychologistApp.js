@@ -57,9 +57,9 @@ const PsychologistApp = () => {
   });
 
   const [profile] = useState({
-    name: 'Dr. Sarah Smith',
+    name: 'Mr.SAM',
     title: 'Clinical Counsellor',
-    email: 'dr.smith@mindmaris.com',
+    email: 'mr.sam@mindmaris.com',
     phone: '+1 (555) 123-4567',
     department: 'Mental Health Counselling',
     specialization: 'Anxiety & Depression',
@@ -249,9 +249,9 @@ const PsychologistApp = () => {
   const Schedule = () => {
     // Current doctor's info
     const currentDoctor = {
-      id: 'dr_smith',
-      name: 'Dr. Sarah Smith',
-      color: '#4CAF50'
+      id: 'mr_sam',
+      name: 'Mr.SAM',
+      color: '#00BFA5'
     };
 
     // Get dates for horizontal scroller
@@ -519,7 +519,7 @@ const PsychologistApp = () => {
               <div className="w-10 h-10 bg-[#E6F6F4] rounded-full flex items-center justify-center">
                 <Stethoscope className="h-5 w-5 text-teal-600" />
               </div>
-              <span className="text-gray-900">{selectedAppointment.doctor || "Dr. Sarah Smith"}</span>
+                              <span className="text-gray-900">{selectedAppointment.doctor || "Mr.SAM"}</span>
             </div>
 
             {/* Time */}
