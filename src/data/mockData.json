@@ -1,0 +1,332 @@
+{
+  "patients": [
+    {
+      "id": "P6895",
+      "name": "Libiraj",
+      "age": 24,
+      "gender": "Male",
+      "phone": "+91 98765 43210",
+      "email": "libiraj@email.com",
+      "rating": "A+",
+      "appointmentHistory": [
+        {
+          "date": "2025-08-06",
+          "displayDate": "WED, 6 AUGUST 2025, YESTERDAY",
+          "sessions": [
+            {
+              "doctor": "Mr.SAM",
+              "time": "12:00 PM - 01:00 PM",
+              "procedures": [
+                {
+                  "name": "CLINICAL ASSESSMENT",
+                  "amount": 2000.00
+                }
+              ],
+              "estimatedAmount": 2000.00
+            }
+          ]
+        },
+        {
+          "date": "2025-08-04",
+          "displayDate": "MON, 4 AUGUST 2025",
+          "sessions": [
+            {
+              "doctor": "Mr.SAM",
+              "time": "11:46 AM - 12:46 PM"
+            },
+            {
+              "doctor": "Psy.SHABNA MANAF",
+              "time": "11:42 AM - 12:42 PM"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6269",
+      "name": "DHANIKA & AJIN",
+      "age": 35,
+      "gender": "Couple",
+      "phone": "+91 98765 43211",
+      "email": "dhanika@email.com",
+      "rating": "A",
+      "appointmentHistory": [
+        {
+          "date": "2025-08-07",
+          "displayDate": "THU, 7 AUGUST 2025, TODAY",
+          "sessions": [
+            {
+              "doctor": "PSY.RESHMA MATHEW",
+              "time": "10:00 AM - 11:00 AM",
+              "procedures": [
+                {
+                  "name": "FAMILY CONSTELLATION",
+                  "amount": 3000.00
+                }
+              ],
+              "estimatedAmount": 3000.00
+            }
+          ]
+        },
+        {
+          "date": "2025-08-05",
+          "displayDate": "TUE, 5 AUGUST 2025",
+          "sessions": [
+            {
+              "doctor": "PSY.RESHMA MATHEW",
+              "time": "02:00 PM - 03:00 PM",
+              "procedures": [
+                {
+                  "name": "COUPLE THERAPY",
+                  "amount": 2500.00
+                }
+              ],
+              "estimatedAmount": 2500.00
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5938",
+      "name": "EVNA SURESH",
+      "age": 42,
+      "gender": "Female",
+      "phone": "+91 98765 43212",
+      "email": "evna@email.com",
+      "rating": "B+",
+      "appointmentHistory": [
+        {
+          "date": "2025-08-07",
+          "displayDate": "THU, 7 AUGUST 2025, TODAY",
+          "sessions": [
+            {
+              "doctor": "Psy.FARAH IQBAL",
+              "time": "09:00 AM - 10:00 AM",
+              "procedures": [
+                {
+                  "name": "TRAUMA THERAPY",
+                  "amount": 3500.00
+                }
+              ],
+              "estimatedAmount": 3500.00
+            }
+          ]
+        },
+        {
+          "date": "2025-08-03",
+          "displayDate": "SUN, 3 AUGUST 2025",
+          "sessions": [
+            {
+              "doctor": "Psy.FARAH IQBAL",
+              "time": "11:00 AM - 12:00 PM",
+              "procedures": [
+                {
+                  "name": "INITIAL CONSULTATION",
+                  "amount": 1500.00
+                }
+              ],
+              "estimatedAmount": 1500.00
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "appointments": [
+    {
+      "id": "P6895",
+      "patientName": "Libiraj",
+      "time": "12:00 PM - 01:00 PM",
+      "status": "check out",
+      "type": "In-Clinic Appointment",
+      "date": "2025-08-06",
+      "doctor": "Mr.SAM",
+      "doctorColor": "#00BFA5",
+      "category": "ANJU HARI",
+      "procedures": [
+        {
+          "name": "CLINICAL ASSESSMENT",
+          "amount": 2000.00
+        }
+      ],
+      "estimatedAmount": 2000.00,
+      "patientDetails": {
+        "age": 24,
+        "gender": "Male",
+        "phone": "+91 98765 43210",
+        "email": "libiraj@email.com",
+        "rating": "A+"
+      }
+    },
+    {
+      "id": "P6269",
+      "patientName": "DHANIKA & AJIN",
+      "time": "10:00 AM - 11:00 AM",
+      "status": "check in",
+      "type": "In-Clinic Appointment",
+      "date": "2025-08-07",
+      "doctor": "PSY.RESHMA MATHEW",
+      "doctorColor": "#FF5252",
+      "category": "Keziah",
+      "procedures": [
+        {
+          "name": "FAMILY CONSTELLATION",
+          "amount": 3000.00
+        }
+      ],
+      "estimatedAmount": 3000.00,
+      "patientDetails": {
+        "age": 35,
+        "gender": "Couple",
+        "phone": "+91 98765 43211",
+        "email": "dhanika@email.com",
+        "rating": "A"
+      }
+    },
+    {
+      "id": "P5938",
+      "patientName": "EVNA SURESH",
+      "time": "09:00 AM - 10:00 AM",
+      "status": "engage",
+      "type": "In-Clinic Appointment",
+      "date": "2025-08-07",
+      "doctor": "Psy.FARAH IQBAL",
+      "doctorColor": "#E040FB",
+      "category": "Sanigha",
+      "procedures": [
+        {
+          "name": "TRAUMA THERAPY",
+          "amount": 3500.00
+        }
+      ],
+      "estimatedAmount": 3500.00,
+      "patientDetails": {
+        "age": 42,
+        "gender": "Female",
+        "phone": "+91 98765 43212",
+        "email": "evna@email.com",
+        "rating": "B+"
+      }
+    }
+  ],
+  "doctors": [
+    {
+      "id": "all",
+      "name": "All Doctors"
+    },
+    {
+      "id": "mr_sam",
+      "name": "Mr.SAM",
+      "color": "#00BFA5",
+      "specialization": "Clinical Psychology",
+      "availability": "Mon-Fri 9AM-5PM",
+      "activePatients": 12,
+      "totalAppointments": 45,
+      "completedAppointments": 42,
+      "earnings": {
+        "weekly": 12500,
+        "monthly": 52000
+      }
+    },
+    {
+      "id": "psy_shabna",
+      "name": "Psy.SHABNA MANAF",
+      "color": "#FF5252",
+      "specialization": "Family Counselling",
+      "availability": "Mon-Thu 10AM-6PM",
+      "activePatients": 8,
+      "totalAppointments": 35,
+      "completedAppointments": 32,
+      "earnings": {
+        "weekly": 10000,
+        "monthly": 45000
+      }
+    },
+    {
+      "id": "psy_farah",
+      "name": "Psy.FARAH IQBAL",
+      "color": "#E040FB",
+      "specialization": "Trauma Therapy",
+      "availability": "Mon-Fri 9AM-4PM",
+      "activePatients": 15,
+      "totalAppointments": 50,
+      "completedAppointments": 47,
+      "earnings": {
+        "weekly": 15000,
+        "monthly": 60000
+      }
+    }
+  ],
+  "managementStats": {
+    "weekly": {
+      "total": 37500,
+      "prime": 25000,
+      "instant": 12500,
+      "connections": 130,
+      "completed": 121
+    },
+    "monthly": {
+      "total": 157000,
+      "prime": 100000,
+      "instant": 57000,
+      "connections": 520,
+      "completed": 484
+    }
+  },
+  "categories": [
+    "No Category",
+    "ANJU HARI",
+    "Keziah",
+    "Sanigha"
+  ],
+  "procedures": [
+    {
+      "section": "PLANNED TREATMENTS",
+      "items": [
+        {
+          "name": "CLINICAL ASSESSMENT",
+          "date": "2025-08-04",
+          "amount": 2000.00
+        }
+      ]
+    },
+    {
+      "section": "ALL TREATMENTS",
+      "items": [
+        {
+          "name": "Consultation",
+          "amount": 1500.00
+        },
+        {
+          "name": "CLINICAL ASSESSMENT",
+          "amount": 2000.00
+        },
+        {
+          "name": "DIAGNOSIS",
+          "amount": 2500.00
+        },
+        {
+          "name": "FAMILY CONSTELLATION",
+          "amount": 3000.00
+        },
+        {
+          "name": "COUPLE THERAPY",
+          "amount": 2500.00
+        },
+        {
+          "name": "TRAUMA THERAPY",
+          "amount": 3500.00
+        },
+        {
+          "name": "Follow-up visit",
+          "amount": 1000.00
+        },
+        {
+          "name": "GENTLE EMPOWERMENT CIRCLE",
+          "amount": 2500.00
+        }
+      ]
+    }
+  ]
+}

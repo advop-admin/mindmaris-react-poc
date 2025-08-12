@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Stethoscope, LayoutGrid } from 'lucide-react';
+import { Calendar, FileText, User, Bell, Clock, CheckCircle, Upload, Home, X, LogOut, ArrowLeft, Stethoscope, LayoutGrid, MoreVertical } from 'lucide-react';
 
 const PsychologistApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -14,126 +14,16 @@ const PsychologistApp = () => {
 
 
   
-  // Load appointments from localStorage or use default data
+  // Import mock data
+  const mockData = require('../data/mockData.json');
+
+  // Load appointments from localStorage or use mock data
   const getInitialAppointments = () => {
     const savedAppointments = localStorage.getItem('mindmaris_appointments');
     if (savedAppointments) {
       return JSON.parse(savedAppointments);
     }
-    return [
-    { 
-      id: 1, 
-      patientName: 'Sarah Johnson', 
-      time: '09:00 AM', 
-      status: 'pending', 
-      type: 'Initial Consultation', 
-      notes: 'Patient experiencing anxiety symptoms',
-      date: '2025-01-08',
-      patientDetails: {
-        age: 28,
-        phone: '+1-555-0123',
-        email: 'sarah@email.com',
-        condition: 'Anxiety Disorder',
-        lastVisit: '2025-01-08'
-      }
-    },
-    { 
-      id: 2, 
-      patientName: 'Michael Chen', 
-      time: '10:30 AM', 
-      status: 'completed', 
-      type: 'Follow-up', 
-      notes: 'Depression treatment progress',
-      date: '2025-01-08',
-      patientDetails: {
-        age: 35,
-        phone: '+1-555-0124',
-        email: 'michael@email.com',
-        condition: 'Depression',
-        lastVisit: '2025-01-08'
-      }
-    },
-    { 
-      id: 3, 
-      patientName: 'Emily Davis', 
-      time: '02:00 PM', 
-      status: 'pending', 
-      type: 'Therapy Session', 
-      notes: 'PTSD therapy session',
-      date: '2025-01-08',
-      patientDetails: {
-        age: 42,
-        phone: '+1-555-0125',
-        email: 'emily@email.com',
-        condition: 'PTSD',
-        lastVisit: '2025-01-07'
-      }
-    },
-    { 
-      id: 4, 
-      patientName: 'James Wilson', 
-      time: '03:30 PM', 
-      status: 'pending', 
-      type: 'Assessment', 
-      notes: 'Bipolar disorder assessment',
-      date: '2025-01-08',
-      patientDetails: {
-        age: 31,
-        phone: '+1-555-0126',
-        email: 'james@email.com',
-        condition: 'Bipolar Disorder',
-        lastVisit: '2025-01-06'
-      }
-    },
-    { 
-      id: 5, 
-      patientName: 'Lisa Anderson', 
-      time: '11:00 AM', 
-      status: 'pending', 
-      type: 'Initial Consultation', 
-      notes: 'New patient consultation',
-      date: '2025-01-09',
-      patientDetails: {
-        age: 29,
-        phone: '+1-555-0127',
-        email: 'lisa@email.com',
-        condition: 'Stress Management',
-        lastVisit: '2025-01-09'
-      }
-    },
-    { 
-      id: 6, 
-      patientName: 'David Brown', 
-      time: '01:30 PM', 
-      status: 'pending', 
-      type: 'Therapy Session', 
-      notes: 'Anxiety therapy session',
-      date: '2025-01-09',
-      patientDetails: {
-        age: 38,
-        phone: '+1-555-0128',
-        email: 'david@email.com',
-        condition: 'Anxiety Disorder',
-        lastVisit: '2025-01-09'
-      }
-    },
-    { 
-      id: 7, 
-      patientName: 'Maria Garcia', 
-      time: '10:00 AM', 
-      status: 'completed', 
-      type: 'Follow-up', 
-      notes: 'Depression follow-up',
-      date: '2025-01-10',
-      patientDetails: {
-        age: 45,
-        phone: '+1-555-0129',
-        email: 'maria@email.com',
-        condition: 'Depression',
-        lastVisit: '2025-01-10'
-      }
-    }
-  ];
+    return mockData.appointments;
   };
 
   const [appointments, setAppointments] = useState(getInitialAppointments());
@@ -361,6 +251,31 @@ const PsychologistApp = () => {
   );
 
   const Schedule = () => {
+    // Current doctor's info
+    const currentDoctor = {
+      id: 'dr_smith',
+      name: 'Dr. Sarah Smith',
+      color: '#4CAF50'
+    };
+
+    // Get dates for horizontal scroller
+    const getDates = () => {
+      const dates = [];
+      const today = new Date(2025, 0, 8); // January 8, 2025
+      for (let i = -3; i <= 3; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        dates.push({
+          date: date,
+          dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
+          dayNumber: date.getDate(),
+          isToday: i === 0,
+          dateString: date.toISOString().split('T')[0]
+        });
+      }
+      return dates;
+    };
+
     // Convert selected date to proper format for filtering
     const getSelectedDateString = () => {
       const currentYear = 2025;
@@ -368,85 +283,200 @@ const PsychologistApp = () => {
       return `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}`;
     };
 
-    // Filter appointments for selected date
-    const filteredAppointments = appointments.filter(appointment => 
-      appointment.date === getSelectedDateString()
-    );
+    // Filter appointments for selected date and current doctor
+    const filteredAppointments = appointments.filter(appointment => {
+      const appointmentDate = new Date(appointment.date);
+      const selectedDateObj = new Date(getSelectedDateString());
+      return (
+        appointmentDate.getFullYear() === selectedDateObj.getFullYear() &&
+        appointmentDate.getMonth() === selectedDateObj.getMonth() &&
+        appointmentDate.getDate() === selectedDateObj.getDate() &&
+        appointment.doctor === currentDoctor.name
+      );
+    });
+
+    // Group appointments by time slot
+    const groupedAppointments = filteredAppointments.reduce((groups, apt) => {
+      if (!groups[apt.time]) {
+        groups[apt.time] = [];
+      }
+      groups[apt.time].push(apt);
+      return groups;
+    }, {});
+
+    const getStatusColor = (status) => {
+      switch (status.toLowerCase()) {
+        case 'cancelled': return 'bg-red-100 text-red-800';
+        case 'check in': return 'bg-green-100 text-green-800';
+        case 'engage': return 'bg-blue-100 text-blue-800';
+        case 'check out': return 'bg-gray-100 text-gray-800';
+        case 'report uploaded': return 'bg-purple-100 text-purple-800';
+        case 'pending': return 'bg-yellow-100 text-yellow-800';
+        default: return 'bg-gray-100 text-gray-800';
+      }
+    };
+
+    const getDoctorColor = (doctorName) => {
+      return currentDoctor.name === doctorName ? currentDoctor.color : '#9E9E9E';
+    };
 
     return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Schedule</h1>
+        <span className="text-teal-600 font-medium">{currentDoctor.name}</span>
       </div>
 
-      {/* Calendar Header */}
+      {/* Date Scroller */}
       <div className="bg-white rounded-lg shadow-sm border p-4">
-        <div className="grid grid-cols-7 gap-1 text-center mb-4">
-          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-            <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1 text-center">
-            {[6, 7, 8, 9, 10, 11, 12].map(date => {
-              const dateString = `2025-01-${date.toString().padStart(2, '0')}`;
-              const appointmentsForDate = appointments.filter(apt => apt.date === dateString);
-              const hasAppointments = appointmentsForDate.length > 0;
-              
-              return (
+        <div className="flex space-x-2 overflow-x-auto pb-2">
+          {getDates().map((dateInfo) => (
             <button
-              key={date}
-              onClick={() => setSelectedDate(date)}
-              className={`py-2 text-sm rounded-lg transition-colors ${
-                    date === selectedDate 
-                      ? 'bg-teal-600 text-white font-bold' 
-                      : hasAppointments 
-                        ? 'text-teal-800 hover:bg-gray-100 font-bold' 
-                        : 'text-gray-900 hover:bg-gray-100'
+              key={dateInfo.dateString}
+              onClick={() => setSelectedDate(dateInfo.dayNumber)}
+              className={`flex-shrink-0 w-16 rounded-lg p-2 transition-colors ${
+                dateInfo.isToday
+                  ? 'bg-teal-600 text-white'
+                  : 'hover:bg-gray-100'
               }`}
             >
-              {date}
+              <div className="text-xs font-medium">{dateInfo.dayName}</div>
+              <div className={`text-lg ${dateInfo.isToday ? 'font-bold' : ''}`}>
+                {dateInfo.dayNumber}
+              </div>
             </button>
-              );
-            })}
-          </div>
+          ))}
+        </div>
       </div>
 
       {/* Appointments List */}
       <div className="space-y-3">
-          {filteredAppointments.length > 0 ? (
-            filteredAppointments.map(appointment => (
-          <div key={appointment.id} className="bg-white rounded-lg shadow-sm border p-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
-                <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                    <p className="text-sm text-teal-600 mt-1">{appointment.type}</p>
-                    {appointment.notes && (
-                      <p className="text-sm text-gray-500 mt-1">Notes: {appointment.notes}</p>
-                    )}
-              </div>
-              <div className="flex flex-col items-end space-y-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                  {appointment.status}
-                </span>
-                  <button
-                      onClick={() => openAppointmentDetail(appointment)}
-                      className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
-                  >
-                      Details
-                  </button>
-                  </div>
+        {Object.entries(groupedAppointments).length > 0 ? (
+          Object.entries(groupedAppointments)
+            .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+            .map(([time, appointments]) => (
+              <div key={time} className="bg-white rounded-lg shadow-sm border">
+                <div className="px-4 py-2 border-b bg-gray-50">
+                  <span className="font-medium text-gray-900">{time}</span>
+                </div>
+                <div className="divide-y">
+                  {appointments.map(appointment => (
+                    <div key={appointment.id} className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <div 
+                              className="w-2 h-2 rounded-full" 
+                              style={{ backgroundColor: getDoctorColor(appointment.doctor) }}
+                            />
+                            <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            <div className="flex items-center space-x-2">
+                              <p className="text-sm text-gray-600">{appointment.patientDetails.gender}, {appointment.patientDetails.age} Years</p>
+                              <span className="text-xs text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">{appointment.category}</span>
+                            </div>
+                            <p className="text-sm text-teal-600">{appointment.procedures}</p>
+                            {appointment.notes && (
+                              <p className="text-sm text-gray-500 line-clamp-2">{appointment.notes}</p>
+                            )}
+                            <div className="flex items-center space-x-2 text-xs text-gray-500">
+                              {appointment.notifySMS && <span>SMS</span>}
+                              {appointment.notifyEmail && <span>Email</span>}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
+                              {appointment.status}
+                            </span>
+                            <button
+                              className="text-gray-400 hover:text-gray-600"
+                              onClick={() => {/* Show action menu */}}
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <div className="flex space-x-2">
+                            {appointment.status === 'pending' && (
+                              <button
+                                onClick={() => {
+                                  const updatedAppointments = appointments.map(apt => 
+                                    apt.id === appointment.id ? { ...apt, status: 'check in' } : apt
+                                  );
+                                  setAppointments(updatedAppointments);
+                                  saveAppointmentsToStorage(updatedAppointments);
+                                }}
+                                className="text-xs bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 transition-colors"
+                              >
+                                Check In
+                              </button>
+                            )}
+                            {appointment.status === 'check in' && (
+                              <button
+                                onClick={() => {
+                                  const updatedAppointments = appointments.map(apt => 
+                                    apt.id === appointment.id ? { ...apt, status: 'engage' } : apt
+                                  );
+                                  setAppointments(updatedAppointments);
+                                  saveAppointmentsToStorage(updatedAppointments);
+                                }}
+                                className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 transition-colors"
+                              >
+                                Engage
+                              </button>
+                            )}
+                            {appointment.status === 'engage' && (
+                              <button
+                                onClick={() => {
+                                  const updatedAppointments = appointments.map(apt => 
+                                    apt.id === appointment.id ? { ...apt, status: 'check out' } : apt
+                                  );
+                                  setAppointments(updatedAppointments);
+                                  saveAppointmentsToStorage(updatedAppointments);
+                                }}
+                                className="text-xs bg-gray-600 text-white px-3 py-1 rounded-full hover:bg-gray-700 transition-colors"
+                              >
+                                Check Out
+                              </button>
+                            )}
+                            {appointment.status === 'check out' && (
+                              <button
+                                onClick={() => {
+                                  openReportModal(appointment);
+                                }}
+                                className="text-xs bg-purple-600 text-white px-3 py-1 rounded-full hover:bg-purple-700 transition-colors"
+                              >
+                                Upload Report
+                              </button>
+                            )}
+                            {appointment.status !== 'cancelled' && (
+                              <button
+                                onClick={() => openAppointmentDetail(appointment)}
+                                className="text-xs bg-teal-600 text-white px-3 py-1 rounded-full hover:bg-teal-700 transition-colors"
+                              >
+                                Details
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))
-          ) : (
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Appointments</h3>
-              <p className="text-gray-600">No appointments scheduled for January {selectedDate}, 2025</p>
-            </div>
-          )}
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Appointments</h3>
+            <p className="text-gray-600">No appointments scheduled for January {selectedDate}, 2025</p>
+          </div>
+        )}
       </div>
+
+
     </div>
   );
   };

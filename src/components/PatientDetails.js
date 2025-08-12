@@ -1,79 +1,23 @@
 import React, { useState } from 'react';
-import { Calendar, Phone, Mail, MoreVertical, ArrowLeft, Plus } from 'lucide-react';
+import { Calendar, ArrowLeft, Plus } from 'lucide-react';
 
-const PatientDetails = ({ onBack, onAddAppointment }) => {
+const PatientDetails = ({ onBack, onAddAppointment, isManagement = false, patientId }) => {
   const [showOptions, setShowOptions] = useState(false);
 
-  // Mock patient data
-  const patient = {
-    name: 'Libiraj',
-    id: 'P6895',
-    rating: 'A+',
-    appointments: [
-      {
-        date: 'WED, 6 AUGUST 2025',
-        status: 'YESTERDAY',
-        sessions: [
-          {
-            doctor: 'Mr.SAM',
-            time: '12:00 PM - 01:00 PM',
-            estimatedAmount: 2000.00,
-            procedures: [
-              { name: 'CLINICAL ASSESMENT', amount: 2000.00 }
-            ]
-          }
-        ]
-      },
-      {
-        date: 'MON, 4 AUGUST 2025',
-        sessions: [
-          {
-            doctor: 'Mr.SAM',
-            time: '11:46 AM - 12:46 PM'
-          },
-          {
-            doctor: 'Psy.SHABNA MANAF',
-            time: '11:42 AM - 12:42 PM'
-          }
-        ]
-      }
-    ]
-  };
+  // Import mock data
+  const mockData = require('../data/mockData.json');
+  
+  // Get patient data based on patientId
+  const patient = mockData.patients.find(p => p.id === patientId) || mockData.patients[0];
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-indigo-800 text-white p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button onClick={onBack} className="p-1">
-              <ArrowLeft className="h-6 w-6" />
-            </button>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="p-1">
-              <Phone className="h-6 w-6" />
-            </button>
-            <button className="p-1">
-              <Mail className="h-6 w-6" />
-            </button>
-            <button 
-              className="p-1 relative"
-              onClick={() => setShowOptions(!showOptions)}
-            >
-              <MoreVertical className="h-6 w-6" />
-              {showOptions && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Edit Patient
-                  </button>
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Delete Patient
-                  </button>
-                </div>
-              )}
-            </button>
-          </div>
+      <div className="bg-white p-4 border-b">
+        <div className="flex items-center">
+          <button onClick={onBack} className="text-gray-600 hover:text-gray-800">
+            <ArrowLeft className="h-5 w-5" />
+          </button>
         </div>
       </div>
 
@@ -93,7 +37,7 @@ const PatientDetails = ({ onBack, onAddAppointment }) => {
 
       {/* Appointments List */}
       <div className="pb-20">
-        {patient.appointments.map((appointmentGroup, groupIndex) => (
+        {patient.appointmentHistory.map((appointmentGroup, groupIndex) => (
           <div key={groupIndex} className="mb-4">
             <div className="px-4 py-2 bg-gray-100">
               <div className="text-gray-600">
@@ -110,7 +54,7 @@ const PatientDetails = ({ onBack, onAddAppointment }) => {
                   <span className="font-medium">{session.doctor}</span>
                   <span className="ml-auto text-gray-600">{session.time}</span>
                 </div>
-                {session.estimatedAmount && (
+                {isManagement && session.estimatedAmount && (
                   <div className="mt-4">
                     <div className="flex justify-between items-center text-gray-600 mb-2">
                       <span>Estimated Amount:</span>
@@ -130,13 +74,15 @@ const PatientDetails = ({ onBack, onAddAppointment }) => {
         ))}
       </div>
 
-      {/* Add Appointment FAB */}
-      <button
-        onClick={onAddAppointment}
-        className="fixed bottom-20 right-4 w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center shadow-lg hover:bg-orange-600 transition-colors"
-      >
-        <Plus className="h-6 w-6 text-white" />
-      </button>
+      {/* Add Appointment FAB - Only visible for management */}
+      {isManagement && (
+        <button
+          onClick={onAddAppointment}
+          className="fixed bottom-20 right-4 w-14 h-14 bg-[#00A099] rounded-full flex items-center justify-center shadow-lg hover:bg-[#008C86] transition-colors z-50"
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      )}
     </div>
   );
 };

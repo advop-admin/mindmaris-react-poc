@@ -79,9 +79,9 @@ const AppointmentDetails = ({ onBack, appointment }) => {
       </div>
 
       {/* Check Out Button */}
-      <div className="fixed bottom-0 left-0 right-0 mx-4">
+      <div className="fixed bottom-[72px] left-0 right-0">
         <button 
-          className="w-full bg-[#00A099] text-white py-4 font-medium"
+          className="w-full bg-[#00A099] text-white h-[56px] text-lg"
           onClick={() => {
             // Handle check out logic
             console.log('Checking out appointment');

@@ -55,12 +55,10 @@ const ManagementApp = () => {
   { id: 4, patientName: 'James Wilson', doctor: 'Dr. Smith', time: '03:30 PM', status: 'pending', type: 'Assessment' }
   ]);
 
-  const [patients, setPatients] = useState([
-    { id: 1, name: 'Sarah Johnson', age: 28, phone: '+1-555-0123', email: 'sarah@email.com', condition: 'Anxiety Disorder' },
-    { id: 2, name: 'Michael Chen', age: 35, phone: '+1-555-0124', email: 'michael@email.com', condition: 'Depression' },
-    { id: 3, name: 'Emily Davis', age: 42, phone: '+1-555-0125', email: 'emily@email.com', condition: 'PTSD' },
-    { id: 4, name: 'James Wilson', age: 31, phone: '+1-555-0126', email: 'james@email.com', condition: 'Bipolar Disorder' }
-  ]);
+  // Import mock data
+  const mockData = require('../data/mockData.json');
+  
+  const [patients, setPatients] = useState(mockData.patients);
 
   const [doctors, setDoctors] = useState([
     { id: 1, name: 'Dr. Sarah Smith', specialization: 'Clinical Psychology', availability: 'Mon-Fri 9AM-5PM', patients: 12 },
@@ -91,6 +89,11 @@ const ManagementApp = () => {
       completed: 165
     }
   });
+
+  // Function to save appointments to localStorage
+  const saveAppointmentsToStorage = (newAppointments) => {
+    localStorage.setItem('managementAppointments', JSON.stringify(newAppointments));
+  };
 
   const [formData, setFormData] = useState({
     patientName: '',
@@ -224,7 +227,9 @@ const ManagementApp = () => {
           notifySMS: formData.notifySMS,
           notifyEmail: formData.notifyEmail
         };
-        setAppointments(prev => [...prev, newAppointment]);
+        const updatedAppointments = [...appointments, newAppointment];
+        setAppointments(updatedAppointments);
+        saveAppointmentsToStorage(updatedAppointments);
       }
       closeModal();
     }
@@ -316,10 +321,13 @@ const ManagementApp = () => {
   );
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+    switch (status.toLowerCase()) {
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      case 'check in': return 'bg-green-100 text-green-800';
+      case 'engage': return 'bg-blue-100 text-blue-800';
+      case 'check out': return 'bg-gray-100 text-gray-800';
+      case 'blocked': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-yellow-100 text-yellow-800';
     }
   };
 
@@ -469,6 +477,8 @@ const ManagementApp = () => {
               patientPhone: selectedPatient.phone
             }));
           }}
+          isManagement={true}
+          patientId={selectedPatient.id}
         />
       ) : (
         <>
@@ -537,48 +547,123 @@ const ManagementApp = () => {
         />
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">Appointment Management</h1>
-            <button 
-              onClick={() => openModal('appointment')}
-              className="bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition-colors"
-            >
-              <Plus className="h-5 w-5" />
-            </button>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold text-gray-900">CALENDAR</h1>
+              <select
+                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                onChange={(e) => {/* Handle doctor filter */}}
+              >
+                <option value="all">All Doctors</option>
+                {doctors.map(doctor => (
+                  <option key={doctor.id} value={doctor.id}>{doctor.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-medium text-gray-900">Schedule</h2>
+              </div>
+              <div className="grid grid-cols-7 gap-1 text-center mb-4">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                  <div key={day} className="text-sm font-medium text-gray-600 py-2">{day}</div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1 text-center">
+                {[5, 6, 7, 8, 9].map(date => {
+                  const dateString = `2025-01-${date.toString().padStart(2, '0')}`;
+                  const appointmentsForDate = appointments.filter(apt => apt.date === dateString);
+                  const hasAppointments = appointmentsForDate.length > 0;
+                  
+                  return (
+                    <button
+                      key={date}
+                      onClick={() => {/* Handle date selection */}}
+                      className={`py-2 text-sm rounded-lg transition-colors ${
+                        date === 8 
+                          ? 'bg-[#00A099] text-white font-bold' 
+                          : hasAppointments 
+                            ? 'text-[#00A099] hover:bg-gray-100 font-bold' 
+                            : 'text-gray-900 hover:bg-gray-100'
+                      }`}
+                    >
+                      {date}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-3">
             {appointments.map(appointment => (
               <div 
                 key={appointment.id} 
-                className="bg-white rounded-lg shadow-sm border p-4 cursor-pointer hover:bg-gray-50"
+                className={`bg-white border ${appointment.isFullDay ? 'border-l-4 border-l-blue-400' : ''} cursor-pointer hover:bg-gray-50`}
                 onClick={() => setSelectedAppointment(appointment)}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{appointment.patientName}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{appointment.time}</p>
-                    <p className="text-sm text-teal-600 mt-1">Doctor: {appointment.doctor}</p>
-                    <p className="text-sm text-gray-600 mt-1">Type: {appointment.type}</p>
+                {appointment.isFullDay ? (
+                  <div className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: appointment.doctorColor }} />
+                        <span className="font-medium text-gray-900">{appointment.patientName}</span>
+                      </div>
+                      <span className="text-sm text-gray-500">{appointment.time}</span>
+                    </div>
+                    <div className="mt-1 flex items-center space-x-2">
+                      <span className="text-sm text-gray-600">{appointment.doctor}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-end space-y-2">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(appointment.status)}`}>
-                      {appointment.status}
-                    </span>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        editAppointment(appointment);
-                      }}
-                      className="text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <Settings className="h-4 w-4" />
-                    </button>
+                ) : (
+                  <div className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-900 font-medium">{appointment.time}</span>
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: appointment.doctorColor }} />
+                        <span className="font-medium text-gray-900">{appointment.patientName} {appointment.id}</span>
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          editAppointment(appointment);
+                        }}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="mt-1 flex items-center justify-between">
+                      <span className="text-sm text-gray-600">{appointment.doctor}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(appointment.status)}`}>
+                          {appointment.status.toUpperCase()}
+                        </span>
+                        {appointment.status !== 'cancelled' && appointment.status !== 'check out' && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const updatedAppointments = appointments.map(apt => 
+                                apt.id === appointment.id ? { ...apt, status: 'cancelled' } : apt
+                              );
+                              setAppointments(updatedAppointments);
+                              saveAppointmentsToStorage(updatedAppointments);
+                            }}
+                            className="text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
+
+
         </>
       )}
     </div>
