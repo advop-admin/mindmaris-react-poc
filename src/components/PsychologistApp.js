@@ -372,7 +372,12 @@ const PsychologistApp = () => {
                               <p className="text-sm text-gray-600">{appointment.patientDetails.gender}, {appointment.patientDetails.age} Years</p>
                               <span className="text-xs text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">{appointment.category}</span>
                             </div>
-                            <p className="text-sm text-teal-600">{appointment.procedures}</p>
+                            <p className="text-sm text-teal-600">
+                              {appointment.procedures && appointment.procedures.length > 0 
+                                ? appointment.procedures.map((proc, index) => proc.name).join(', ')
+                                : 'No procedures'
+                              }
+                            </p>
                             {appointment.notes && (
                               <p className="text-sm text-gray-500 line-clamp-2">{appointment.notes}</p>
                             )}
